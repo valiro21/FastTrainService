@@ -8,8 +8,27 @@
 #include <algorithm>
 #include "Server.hpp"
 #include "Logger.hpp"
-#include "DatabaseManager.h"
+#include "Server/DatabaseManager.h"
 
+Server::Server (std::string host, int port) throw(std::ios_base::failure) {
+    struct sockaddr_in svr_addr;
+
+    //create socket
+    listen_fd = socket(AF_INET, SOCK_STREAM, 0);
+    if (listen_fd < 0) {
+        throw std::ios_base::failure("Cannot open socket");
+    }
+    bzero((char *) &svr_addr, sizeof(svr_addr));
+
+    svr_addr.sin_family = AF_INET;
+    svr_addr.sin_port = htons((uint16_t)port);
+    inet_pton (AF_INET, host.c_str(), &svr_addr.sin_addr.s_addr);
+
+    //bind socket
+    if (bind(listen_fd, (struct sockaddr *) &svr_addr, sizeof(svr_addr)) < 0) {
+        throw std::ios_base::failure("Cannot bind to " + host + ":" + std::to_string(port));
+    }
+}
 
 Server::Server (int port) throw(std::ios_base::failure) {
     struct sockaddr_in svr_addr;

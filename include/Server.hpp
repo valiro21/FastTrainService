@@ -17,6 +17,7 @@ class Server : public JThread {
     std::mutex clients_lock;
 public:
     Server (int port) throw(std::ios_base::failure);
+    Server::Server (std::string host, int port) throw(std::ios_base::failure);
     void remove (ClientThread *t);
     void run() throw (std::ios_base::failure);
 };
