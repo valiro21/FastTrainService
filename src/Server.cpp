@@ -22,7 +22,7 @@ Server::Server (int port) throw(std::ios_base::failure) {
     bzero((char *) &svr_addr, sizeof(svr_addr));
 
     svr_addr.sin_family = AF_INET;
-    svr_addr.sin_port = htons(port);
+    svr_addr.sin_port = htons((uint16_t)port);
     inet_pton (AF_INET, "127.0.0.1", &svr_addr.sin_addr.s_addr);
 
     //bind socket

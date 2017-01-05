@@ -19,7 +19,6 @@ class JThread {
 public:
     void start ();
     void join ();
-    void detach ();
     void attach_lambda(std::function<void()> lambda);
 
     virtual void run () = 0;

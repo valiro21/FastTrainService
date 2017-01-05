@@ -16,10 +16,6 @@ void JThread::start () {
     proc = new std::thread ([this](){run();notifyAll();});
 }
 
-void JThread::detach () {
-    proc->detach();
-}
-
 void JThread::attach_lambda(std::function<void()> lambda) {
     observers.push_back (lambda);
 }

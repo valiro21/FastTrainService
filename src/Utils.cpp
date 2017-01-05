@@ -15,17 +15,9 @@ Utils& Utils::GetInstance () {
 }
 
 int Utils::ReadInt (int fd) throw(std::ios_base::failure) {
-    int x = 0, nr;
+    int x = 0; ssize_t nr;
     if ((nr = read(fd, &x, 4)) == -1 || nr != 4) {
         throw std::ios_base::failure("Failed to read int!");
-    }
-    return x;
-}
-
-float Utils::ReadFloat (int fd) throw(std::ios_base::failure) {
-    float x = 0; int nr;
-    if ((nr = read(fd, &x, 4)) == -1 || nr != 4) {
-        throw std::ios_base::failure("Failed to read float!");
     }
     return x;
 }
@@ -51,7 +43,8 @@ bool Utils::check_size(size_t size){
 }
 
 std::string Utils::Read (int fd) throw(std::ios_base::failure) {
-    size_t nrc = ReadInt (fd), nr;
+    size_t nrc = (size_t)ReadInt (fd);
+    ssize_t nr;
 
     if (!check_size (nrc) || (nr = read (fd, buffer, nrc)) == -1 || nr != nrc)
         throw std::ios_base::failure("Failed to read string!");
@@ -61,7 +54,7 @@ std::string Utils::Read (int fd) throw(std::ios_base::failure) {
 }
 
 void Utils::Write (int fd, std::string message) {
-    int size = message.size ();
+    unsigned long size = message.size ();
     if ( write(fd, (char *)&size, 4) != 4 ||
          dprintf(fd, "%s", message.c_str()) != size )
         throw std::ios_base::failure(std::string ("Failed to write string: ") + strerror(errno) + " " + std::to_string(fd));
@@ -104,6 +97,9 @@ json Utils::neo4j_to_json (neo4j_value_t value) {
         result.emplace ("properties", json::parse(Utils::repair_json_string(Utils::neo4j_raw_string(value2))));
 
         return result;
+    }
+    else {
+        return json();
     }
 }
 
