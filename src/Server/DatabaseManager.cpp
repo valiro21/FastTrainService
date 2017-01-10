@@ -2,6 +2,7 @@
 // Created by vrosca on 12/22/16.
 //
 
+#include <vector>
 #include "DatabaseManager.h"
 
 std::string DatabaseManager::user = "neo4j";
@@ -10,6 +11,18 @@ std::string DatabaseManager::addr = "localhost";
 std::string DatabaseManager::port = "7687";
 std::string DatabaseManager::connection_string = "";
 neo4j_connection_t* DatabaseManager::connection= NULL;
+std::vector<std::string> exists_constraints;
+
+void init_constraints () {
+    exists_constraints.push_back("(station:Station) ASSERT exists(station.city)");
+    exists_constraints.push_back("(station:Station) ASSERT exists(station.station)");
+    exists_constraints.push_back("(station:Station) ASSERT exists(station.longitude)");
+    exists_constraints.push_back("(station:Station) ASSERT exists(station.latitude)");
+    exists_constraints.push_back("(station:Station) ASSERT exists(station.country)");
+
+    exists_constraints.push_back("(t:TRAN_TO_DEST) ASSERT exists(t.arrival)");
+    exists_constraints.push_back("(t:DEST_TO_TRAIN) ASSERT exists(t.desparture)");
+}
 
 
 int DatabaseManager::initDB() {
@@ -26,6 +39,12 @@ int DatabaseManager::initDB() {
         neo4j_perror(stderr, errno, "Connection failed");
         return EXIT_FAILURE;
     }
+
+    init_constraints();
+    for (auto i : exists_constraints) {
+        DatabaseManager::query("CREATE CONSTRAINT ON " + i, [](){});
+    }
+
 
     return EXIT_SUCCESS;
 }
