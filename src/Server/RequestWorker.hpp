@@ -8,7 +8,7 @@
 
 #include <vector>
 #include "JThread.hpp"
-#include "RequestTask.hpp"
+#include "Server/Requests/RequestTask.hpp"
 
 class RequestWorker : public JThread {
     std::function<void(std::string)> callback;

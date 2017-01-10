@@ -4,8 +4,7 @@
 
 #include <algorithm>
 #include "RequestsPool.hpp"
-#include "RequestWorker.hpp"
-#include "RequestTaskFactory.hpp"
+#include "Server/Requests/RequestTaskFactory.hpp"
 #include "Logger.hpp"
 #include "Utils.hpp"
 
@@ -78,10 +77,6 @@ RequestsPool& RequestsPool::GetInstance () {
         singleton->setLimit (20);
     }
     return *singleton;
-}
-
-void RequestsPool::SetLimit (int number) {
-    singleton->setLimit(number);
 }
 
 void RequestsPool::setLimit (int number) {

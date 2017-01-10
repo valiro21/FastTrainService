@@ -26,7 +26,6 @@ class RequestsPool {
 public:
     static RequestsPool& GetInstance ();
 
-    static void SetLimit (int number);
     void setLimit (int number);
 
     void remove (RequestWorker *thread);
