@@ -42,7 +42,7 @@ int DatabaseManager::initDB() {
 
     init_constraints();
     for (auto i : exists_constraints) {
-        DatabaseManager::query("CREATE CONSTRAINT ON " + i, [](){});
+        query("CREATE CONSTRAINT ON " + i, [](neo4j_result_stream_t *result_stream){});
     }
 
 
