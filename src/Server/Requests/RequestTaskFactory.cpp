@@ -3,10 +3,10 @@
 //
 
 #include "RequestTaskFactory.hpp"
-#include "Logger.hpp"
 #include "Utils.hpp"
-#include "ArrivalsRequest.hpp"
-#include "DeparturesRequest.hpp"
+#include "Server/Requests/ArrivalsRequest.hpp"
+#include "Server/Requests/DeparturesRequest.hpp"
+#include "Server/Requests/AutocompleteRequest.hpp"
 
 RequestTaskFactory* RequestTaskFactory::singleton = NULL;
 
@@ -19,12 +19,13 @@ RequestTaskFactory& RequestTaskFactory::GetInstance() {
 
 
 RequestTask* RequestTaskFactory::getTask (json request) throw (std::domain_error){
-    RequestTask *task;
     std::string action = request["action"].get<std::string>();
     if (action == "arrivals")
         return new ArrivalsRequest ();
     else if (action == "departures")
         return new DeparturesRequest ();
+    else if (action == "autocomplete")
+        return new AutocompleteRequest ();
     else
         throw std::ios_base::failure("Field action missing from request");
     return NULL;

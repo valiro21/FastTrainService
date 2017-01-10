@@ -8,13 +8,6 @@
 
 #include "RequestWorker.hpp"
 
-class SendBack : public RequestTask {
-public:
-    std::string solve (std::string request) {
-        return request;
-    }
-};
-
 class RequestTaskFactory {
     RequestTaskFactory () {}
     static RequestTaskFactory *singleton ;
