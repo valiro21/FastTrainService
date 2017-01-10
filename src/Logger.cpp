@@ -23,3 +23,13 @@ void Logger::logd (std::string message) const {
 void Logger::loge (std::string message) const {
     std::cerr << "Error: " << message << '\n';
 }
+
+Logger& Logger::operator <<(std::string str) {
+    std::cout << str;
+    return *this;
+}
+
+Logger& Logger::operator <<(int nr) {
+    std::cout << nr;
+    return *this;
+}
