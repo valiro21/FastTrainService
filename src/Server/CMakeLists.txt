@@ -2,8 +2,6 @@ project(FastTrainService)
 
 include_directories(${PROJECT_SOURCE_DIR})
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread -lneo4j-client -lssl -lcrypto")
-
 set(SOURCE_FILES
         ${SOURCE_FILES}
         main.cpp
@@ -20,4 +18,8 @@ set(SOURCE_FILES
 
 set(EXECUTABLE_OUTPUT_PATH ../../bin/${CMAKE_BUILD_TYPE})
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+
 add_executable(FastTrainServer ${SOURCE_FILES})
+
+target_link_libraries(FastTrainServer neo4j-client ssl crypto)
