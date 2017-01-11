@@ -8,8 +8,8 @@
 #include "DatabaseManager.h"
 
 std::string AutocompleteRequest::solve (json request) {
-    std::string geo_long = std::to_string(request["longitude"].get<int>());
-    std::string geo_lat = std::to_string(request["latitude"].get<int>());
+    std::string geo_long = std::to_string(request["longitude"].get<double>());
+    std::string geo_lat = std::to_string(request["latitude"].get<double>());
 
     std::string query = "MATCH (a:Station) WHERE a.city LIKE '" + request["prefix"].get<std::string>() + "' "
      + "RETURN a ORDER BY (" + geo_long + "- a.longitude)^2 + (" + geo_lat + " - a.latitude)^2 asc LIMIT 5";
