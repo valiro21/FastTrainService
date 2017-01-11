@@ -3,6 +3,7 @@
 //
 
 #include <cstring>
+#include <Logger.hpp>
 #include "Utils.hpp"
 
 Utils* Utils::singleton = NULL;
@@ -51,6 +52,16 @@ std::string Utils::Read (int fd) throw(std::ios_base::failure) {
     buffer[nrc] = '\0';
     std::string s(buffer);
     return s;
+}
+
+json Utils::ReadJson (int fd) throw(std::ios_base::failure) {
+    try {
+        return json::parse(Utils::Read(fd));
+    }
+    catch (std::invalid_argument &e) {
+        Logger::GetInstance().logd ("Request parse error: " + std::string(e.what()));
+        return json();
+    }
 }
 
 void Utils::Write (int fd, std::string message) {
