@@ -5,6 +5,7 @@
 #ifndef MERSULTRENURILOR_LOGGER_H
 #define MERSULTRENURILOR_LOGGER_H
 #define DEBUG 1
+#include <string>
 
 
 class Logger {
