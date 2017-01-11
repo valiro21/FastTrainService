@@ -81,6 +81,7 @@ std::string Utils::repair_json_string (std::string str) {
     return std::regex_replace(str, regexp, "\"$1\":");
 }
 
+#ifdef NEO4J_CLIENT_H
 std::string Utils::neo4j_raw_string (neo4j_value_t value) {
     char *buf = new char[2048];
     size_t nr;
@@ -117,6 +118,7 @@ json Utils::neo4j_to_json (neo4j_value_t value) {
         return json();
     }
 }
+#endif
 
 std::string Utils::getErrorJSONString(std::string error) {
     return "{\"error\": \"" + error + "\"}";
