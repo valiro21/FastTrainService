@@ -71,6 +71,10 @@ void Utils::Write (int fd, std::string message) {
         throw std::ios_base::failure(std::string ("Failed to write string: ") + strerror(errno) + " " + std::to_string(fd));
 }
 
+void Utils::WriteJson (int fd, json message) {
+    std::string str_message = message.dump();
+    Write(fd, str_message);
+}
 
 std::regex Utils::regexp("([a-zA-Z][a-zA-Z0-9_]*[ ]*)(:)", std::regex_constants::basic);
 std::string Utils::repair_json_string (std::string str) {

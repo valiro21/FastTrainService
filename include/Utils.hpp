@@ -32,6 +32,7 @@ public:
     json ReadJson (int fd) throw(std::ios_base::failure);
     int ReadInt (int fd) throw(std::ios_base::failure);
     void Write (int fd, std::string message);
+    void WriteJson (int fd, json message);
 
     std::string repair_json_string (std::string str);
     std::string neo4j_raw_string (neo4j_value_t value);
