@@ -3,7 +3,7 @@
 //
 
 #include <future>
-#include <chrono>
+#include <Logger.hpp>
 #include "SearchButton.hpp"
 #include "Client.hpp"
 
@@ -13,7 +13,13 @@ SearchButton::SearchButton (QWidget *parent) : QPushButton(parent) {
 
 void SearchButton::search(bool checked) {
     if (checked) {
-        Client::GetInstance().search ();
+        setEnabled(false);
+        auto future = std::async(std::launch::async, []() {Client::GetInstance().search();});
+        auto timeout = future.wait_for (std::chrono::seconds (8));
+        if (timeout == std::future_status::timeout) {
+            Logger::GetInstance() << "Timeout reached\n";
+        }
+        setEnabled(true);
     }
 }
 
