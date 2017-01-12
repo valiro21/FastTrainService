@@ -10,6 +10,7 @@ find_package( Qt5Gui REQUIRED )
 find_package( Qt5Location REQUIRED )
 
 qt5_wrap_cpp(FastTrainClientWrap CitySelector.hpp)
+qt5_wrap_cpp(FastTrainClientWrap ActionSelector.hpp)
 
 set(SOURCE_FILES
         ${SOURCE_FILES} main.cpp DateSelector.cpp DateSelector.hpp CitySelector.cpp ${FastTrainClientWrap} Calendar.cpp Calendar.hpp ActionSelector.cpp ActionSelector.hpp SearchWidget.cpp SearchWidget.hpp Client.cpp Client.hpp)

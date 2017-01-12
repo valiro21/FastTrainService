@@ -11,7 +11,7 @@
 SearchWidget::SearchWidget(QWidget* parent) : QWidget(parent) {
     QVBoxLayout *layout = new QVBoxLayout();
     DateSelector *dateSelector = new DateSelector ();
-    ActionSelector *actionSelector = new ActionSelector();
+    ActionSelector *actionSelector = &ActionSelector::GetInstance();
 
     QPushButton *searchButton = new QPushButton("Search");
 
