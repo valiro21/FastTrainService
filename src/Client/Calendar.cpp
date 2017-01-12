@@ -50,8 +50,32 @@ void Calendar::add (int val, int type) {
                 month++;
                 month %= 12;
             }
-            this->day = tmp_val;
+            this->day = (unsigned int) tmp_val;
             break;
+        default:
+            return;
+    }
+}
+
+void Calendar::set (int val, int type) {
+    switch (type) {
+        case SECOND:
+            if (0 <= val && val < 60) {
+                second = (unsigned int) val;
+            }
+            break;
+        case MINUTE:
+            if (0 <= val && val < 60) {
+                minute = (unsigned int) val;
+            }
+            break;
+        case HOUR:
+            if (0 <= hour && hour < 60) {
+                second = (unsigned int) val;
+            }
+            break;
+        case YEAR:
+            year = (unsigned int) val;
         default:
             return;
     }

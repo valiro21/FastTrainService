@@ -36,6 +36,7 @@ public:
     bool isLeapYear ();
 
     unsigned int get (int type);
+    void set (int val, int type);
 
     std::string to_string ();
 };
