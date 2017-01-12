@@ -24,6 +24,7 @@ public:
     double getLatitude ();
     static Client& GetInstance ();
     std::vector<std::string> autocompleteUpdate (std::string text);
+    void search ();
 };
 
 

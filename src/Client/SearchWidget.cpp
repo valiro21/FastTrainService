@@ -7,13 +7,14 @@
 #include "SearchWidget.hpp"
 #include "ActionSelector.hpp"
 #include "DateSelector.hpp"
+#include "SearchButton.hpp"
 
 SearchWidget::SearchWidget(QWidget* parent) : QWidget(parent) {
     QVBoxLayout *layout = new QVBoxLayout();
     DateSelector *dateSelector = new DateSelector ();
     ActionSelector *actionSelector = &ActionSelector::GetInstance();
 
-    QPushButton *searchButton = new QPushButton("Search");
+    SearchButton *searchButton = &SearchButton::GetInstance ();
 
     layout->addWidget(dateSelector);
     layout->addWidget(actionSelector);

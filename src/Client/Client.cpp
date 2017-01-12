@@ -84,5 +84,8 @@ std::vector<std::string> Client::autocompleteUpdate (std::string text) {
         res.push_back (text + " - Could not retrive stations");
         return res;
     }
+}
+
+void Client::search () {
 
 }
