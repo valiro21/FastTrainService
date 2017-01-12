@@ -10,7 +10,7 @@
 #include <JThread.hpp>
 
 class LambdaThread : public JThread{
-private:
+protected:
     std::function<void(void)> internal_lambda;
 public:
     LambdaThread (std::function<void(void)> lambda);
