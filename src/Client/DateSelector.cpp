@@ -1,57 +1,77 @@
 //
 // Created by vrosca on 1/10/17.
 //
-
-#include <QtWidgets/QComboBox>
 #include <QtCore/QStringListModel>
 #include <QtWidgets/QLabel>
+#include <Utils.hpp>
+#include <ScheduleThread.hpp>
 #include "DateSelector.hpp"
-#include "Calendar.hpp"
 
 DateSelector::DateSelector (QWidget *parent) : QWidget(parent) {
     QVBoxLayout *layout = new QVBoxLayout();
+    hoursBox = new HourWidget();
+    dateBox = new DateWidget();
+    dateBox->setHoursBox(hoursBox);
+    hoursBox->updateDate(true);
+    updateDate();
+    layout->addWidget(new QLabel("Date:"));
+    layout->addWidget(dateBox);
+    layout->addWidget(new QLabel("Search for trains after hour:"));
+    layout->addWidget(hoursBox);
+    setLayout(layout);
 
-    QComboBox *dateBox = new QComboBox();
+    unsigned int remaining_time =  (60 - Calendar().get(Calendar::MINUTE)) * 60 * 1000  + (60 - Calendar().get(Calendar::SECOND)) * 1000;
 
+    // hourly update
+    update_thread = new ScheduleThread ([this](){this->updateDate();}, remaining_time, 60*60*1000);
+    update_thread->start ();
+}
+
+DateSelector* DateSelector::instance = 0;
+
+DateSelector& DateSelector::GetInstance (QWidget *parent) {
+    if (instance == 0) {
+        instance = new DateSelector(parent);
+    }
+    return *instance;
+}
+
+Calendar& DateSelector::getSelectedCalendar () {
+    Calendar *result = new Calendar();
+
+    *result = days[dateBox->currentIndex()];
+
+    std::string selected_hour = hoursBox->currentText().toStdString();
+    if (selected_hour.size () == 0) {
+        return *new Calendar();
+    }
+    else if (!('0'<= selected_hour[0] && selected_hour[0] <= '9') ) {
+        return *new Calendar ();
+    }
+    else {
+        int hour = std::stoi(selected_hour);
+        result->set(hour, Calendar::HOUR);
+        result->set(0, Calendar::MINUTE);
+        result->set(0, Calendar::SECOND);
+    }
+    return *result;
+}
+
+void DateSelector::updateDate () {
     Calendar c;
     QStringList dates = QStringList();
+    days.clear ();
     for (int i = 0; i < 7; i++) {
         dates << c.to_string().c_str();
+        days.emplace_back (c);
         c.add(1, Calendar::DAY);
     }
 
     QStringListModel *dateModel = new QStringListModel();
     dateModel->setStringList(dates);
+    int currentIndex = dateBox->currentIndex();
     dateBox->setModel(dateModel);
-
-    QComboBox* hoursBox = new QComboBox();
-
-
-    Calendar c2;
-    QStringListModel *hourModel = new QStringListModel();
-    QStringList hours = QStringList();
-
-
-    hours << "CURRENT TIME";
-    for (int i = c2.get(Calendar::HOUR) + 1; i <= 23; i++) {
-        hours << std::to_string (i).c_str();
-    }
-    hourModel->setStringList(hours);
-    hoursBox->setModel(hourModel);
-
-    QLabel *dateLabel = new QLabel();
-    dateLabel->setText("Date:");
-
-    QLabel *hourLabel = new QLabel();
-    hourLabel->setText("Trains after hour:");
-
-    setFixedHeight(200);
-    setFixedWidth(300);
-
-    layout->addWidget(dateLabel);
-    layout->addWidget(dateBox);
-    layout->addWidget(hourLabel);
-    layout->addWidget(hoursBox);
-
-    setLayout(layout);
+    if (currentIndex > 0) currentIndex--;
+    else currentIndex = 0;
+    dateBox->setCurrentIndex(currentIndex);
 }

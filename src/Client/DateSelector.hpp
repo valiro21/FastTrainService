@@ -7,10 +7,25 @@
 
 
 #include <QtWidgets/QVBoxLayout>
+#include <QComboBox>
+#include <JThread.hpp>
+#include "Calendar.hpp"
+#include "HourWidget.hpp"
+#include "DateWidget.hpp"
 
 class DateSelector : public QWidget {
-public:
+private:
     DateSelector (QWidget *parent = 0);
+    static DateSelector *instance;
+    DateWidget *dateBox;
+    HourWidget *hoursBox;
+    JThread* update_thread;
+
+public:
+    std::vector<Calendar> days;
+    static DateSelector& GetInstance (QWidget *parent = 0);
+    Calendar& getSelectedCalendar ();
+    void updateDate ();
 };
 
 
