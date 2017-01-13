@@ -11,10 +11,11 @@
 
 SearchWidget::SearchWidget(QWidget* parent) : QWidget(parent) {
     QVBoxLayout *layout = new QVBoxLayout();
-    DateSelector *dateSelector = new DateSelector ();
+    DateSelector *dateSelector = &DateSelector::GetInstance();
     ActionSelector *actionSelector = &ActionSelector::GetInstance();
 
     SearchButton *searchButton = &SearchButton::GetInstance ();
+    searchButton->setText("Search");
 
     layout->addWidget(dateSelector);
     layout->addWidget(actionSelector);
