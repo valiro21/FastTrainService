@@ -8,7 +8,7 @@
 #include "ActionSelector.hpp"
 #include "CitySelector.hpp"
 
-QVBoxLayout* createCityLayout (std::string label, QLineEdit *city) {
+QVBoxLayout* createCityLayout (std::string label, QLineEdit *& city) {
     QLabel *cityl = new QLabel();
     city = new CitySelector ();
     cityl->setText(label.c_str());
