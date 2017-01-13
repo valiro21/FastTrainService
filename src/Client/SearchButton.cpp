@@ -12,7 +12,7 @@ SearchButton::SearchButton (QWidget *parent) : QPushButton(parent) {
 }
 
 void SearchButton::search(bool checked) {
-    if (checked) {
+    if (!checked) {
         setEnabled(false);
         auto future = std::async(std::launch::async, []() {Client::GetInstance().search();});
         auto timeout = future.wait_for (std::chrono::seconds (8));
