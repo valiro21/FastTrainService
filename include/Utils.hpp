@@ -29,10 +29,10 @@ public:
     static Utils& GetInstance ();
 
     std::string Read (int fd) throw(std::ios_base::failure);
-    json ReadJson (int fd) throw(std::ios_base::failure);
+    json ReadJSON (int fd) throw(std::ios_base::failure);
     int ReadInt (int fd) throw(std::ios_base::failure);
     void Write (int fd, std::string message);
-    void WriteJson (int fd, json message);
+    void WriteJSON (int fd, json message);
 
     std::string repair_json_string (std::string str);
 #ifdef NEO4J_CLIENT_H

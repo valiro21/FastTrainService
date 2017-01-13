@@ -54,7 +54,7 @@ std::string Utils::Read (int fd) throw(std::ios_base::failure) {
     return s;
 }
 
-json Utils::ReadJson (int fd) throw(std::ios_base::failure) {
+json Utils::ReadJSON (int fd) throw(std::ios_base::failure) {
     try {
         return json::parse(Utils::Read(fd));
     }
@@ -71,7 +71,7 @@ void Utils::Write (int fd, std::string message) {
         throw std::ios_base::failure(std::string ("Failed to write string: ") + strerror(errno) + " " + std::to_string(fd));
 }
 
-void Utils::WriteJson (int fd, json message) {
+void Utils::WriteJSON (int fd, json message) {
     std::string str_message = message.dump();
     Write(fd, str_message);
 }
