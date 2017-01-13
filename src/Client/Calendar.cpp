@@ -109,3 +109,16 @@ bool Calendar::isLeapYear () {
 std::string Calendar::to_string() {
     return std::to_string(get(DAY)) + "-"+ std::to_string(get(MONTH)) + "-" + std::to_string(get(YEAR));
 }
+
+json Calendar::toJSON () {
+    json calendar;
+
+    calendar["year"] = get(YEAR);
+    calendar["month"] = get(MONTH);
+    calendar["day"] = get(DAY);
+    calendar["hour"] = get(HOUR);
+    calendar["minute"] = get(MINUTE);
+    calendar["second"] = get(SECOND);
+
+    return calendar;
+}

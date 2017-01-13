@@ -7,6 +7,9 @@
 
 
 #include <string>
+#include "json/json.hpp"
+
+using json = nlohmann::json;
 
 class Calendar {
     unsigned int second;
@@ -39,7 +42,8 @@ public:
     void set (int val, int type);
 
     std::string to_string ();
-};
 
+    json toJSON ();
+};
 
 #endif //FASTTRAINSERVICE_CALENDAR_HPP
