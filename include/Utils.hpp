@@ -31,8 +31,8 @@ public:
     std::string Read (int fd) throw(std::ios_base::failure);
     json ReadJSON (int fd) throw(std::ios_base::failure);
     int ReadInt (int fd) throw(std::ios_base::failure);
-    void Write (int fd, std::string message);
-    void WriteJSON (int fd, json message);
+    void Write (int fd, std::string message) throw(std::ios_base::failure);
+    void WriteJSON (int fd, json message) throw(std::ios_base::failure);
 
     std::string repair_json_string (std::string str);
 #ifdef NEO4J_CLIENT_H

@@ -64,14 +64,14 @@ json Utils::ReadJSON (int fd) throw(std::ios_base::failure) {
     }
 }
 
-void Utils::Write (int fd, std::string message) {
+void Utils::Write (int fd, std::string message) throw(std::ios_base::failure){
     unsigned long size = message.size ();
     if ( write(fd, (char *)&size, 4) != 4 ||
          dprintf(fd, "%s", message.c_str()) != size )
         throw std::ios_base::failure(std::string ("Failed to write string: ") + strerror(errno) + " " + std::to_string(fd));
 }
 
-void Utils::WriteJSON (int fd, json message) {
+void Utils::WriteJSON (int fd, json message) throw(std::ios_base::failure){
     std::string str_message = message.dump();
     Write(fd, str_message);
 }
