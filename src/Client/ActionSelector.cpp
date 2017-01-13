@@ -61,19 +61,19 @@ ActionSelector& ActionSelector::GetInstance (QWidget *parent) {
     return *instance;
 }
 
-std::string ActionSelector::getArrivalCity () {
+std::string ActionSelector::getEndCity () {
     if (getCurrentTab () == 1)
         return arrivals_city->text().toStdString();
     else {
-        return start_city_path->text ().toStdString ();
+        return destination_city_path->text ().toStdString ();
     }
 }
 
-std::string ActionSelector::getDestinationCity () {
-    if (getCurrentTab () == 1)
+std::string ActionSelector::getOriginCity () {
+    if (getCurrentTab () == 0)
         return departures_city->text().toStdString();
     else {
-        return destination_city_path->text ().toStdString ();
+        return start_city_path->text ().toStdString ();
     }
 }
 

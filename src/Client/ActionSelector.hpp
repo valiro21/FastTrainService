@@ -18,11 +18,11 @@ Q_OBJECT
     QLineEdit *departures_city;
     QLineEdit *start_city_path;
     QLineEdit *destination_city_path;
-    int tab = 1;
+    int tab = 0;
 public:
     static ActionSelector& GetInstance (QWidget *parent = 0);
-    std::string getArrivalCity ();
-    std::string getDestinationCity ();
+    std::string getEndCity ();
+    std::string getOriginCity ();
     int getCurrentTab ();
 private slots:
     void currentTabChanged(int);
