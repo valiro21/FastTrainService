@@ -7,7 +7,11 @@
 
 std::string DatabaseManager::user = "neo4j";
 std::string DatabaseManager::pass = "train1234";
+#ifdef RELEASE
+std::string DatabaseManager::addr = "db";
+#else
 std::string DatabaseManager::addr = "localhost";
+#endif
 std::string DatabaseManager::port = "7687";
 std::string DatabaseManager::connection_string = "";
 neo4j_connection_t* DatabaseManager::connection= NULL;
@@ -35,13 +39,6 @@ int DatabaseManager::initDB() {
                                             DatabaseManager::addr + ":" +
                                             DatabaseManager::port;
     neo4j_client_init();
-    DatabaseManager::connection =
-            neo4j_connect(DatabaseManager::connection_string.c_str(), NULL, NEO4J_INSECURE);
-
-    if (connection == NULL) {
-        neo4j_perror(stderr, errno, "Connection failed");
-        return EXIT_FAILURE;
-    }
 
     init_constraints();
     for (auto i : exists_constraints) {
@@ -52,7 +49,20 @@ int DatabaseManager::initDB() {
 }
 
 int DatabaseManager::query (std::string queryStr, std::function<void(neo4j_result_stream_t*)> process_data) {
+    DatabaseManager::connection =
+            neo4j_connect(DatabaseManager::connection_string.c_str(), NULL, NEO4J_INSECURE);
+
+    if (connection == NULL) {
+        neo4j_perror(stderr, errno, "Connection failed");
+        return EXIT_FAILURE;
+    }
+
     neo4j_session_t *session = neo4j_new_session(DatabaseManager::connection);
+    if (session == NULL) {
+        neo4j_perror(stderr, errno, "Failed to start session");
+        return EXIT_FAILURE;
+    }
+
     if (session == NULL) {
         neo4j_perror(stderr, errno, "Failed to start session");
         return EXIT_FAILURE;
@@ -68,7 +78,9 @@ int DatabaseManager::query (std::string queryStr, std::function<void(neo4j_resul
     process_data(results);
 
     neo4j_close_results(results);
+    neo4j_reset_session(session);
     neo4j_end_session(session);
+    neo4j_close(DatabaseManager::connection);
 
     return EXIT_SUCCESS;
 }

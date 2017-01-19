@@ -15,7 +15,7 @@ Logger& Logger::GetInstance () {
 }
 
 void Logger::logd (std::string message) const {
-#ifdef DEBUG
+#ifndef RELEASE
     std::cout << "Debug: " << message << '\n';
 #endif
 }
