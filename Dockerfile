@@ -4,4 +4,4 @@ COPY ./ /FastTrainService
 RUN cd /FastTrainService && cmake -DCMAKE_BUILD_TYPE=Release ./ && make
 RUN cp /FastTrainService/bin/Release/FastTrainServer ./
 EXPOSE 8181
-CMD /FastTrainService
+CMD /FastTrainServer

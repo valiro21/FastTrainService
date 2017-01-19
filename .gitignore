@@ -50,3 +50,4 @@ FastTrainService.cbp
 /src/Client/moc_*
 /src/Client/__/
 /bin/Debug/
+/database*
