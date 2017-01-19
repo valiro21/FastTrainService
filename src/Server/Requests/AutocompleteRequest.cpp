@@ -4,6 +4,7 @@
 
 #include <Utils.hpp>
 #include <Logger.hpp>
+#include <DatabaseUtils.hpp>
 #include "AutocompleteRequest.hpp"
 #include "DatabaseManager.h"
 
@@ -22,7 +23,7 @@ std::string AutocompleteRequest::solve (json request) {
         try {
             std::vector<std::string> word_result;
             while (result != NULL) {
-                json station = Utils::GetInstance().neo4j_to_json(neo4j_result_field(result, 0))["properties"];
+                json station = DatabaseUtils::GetInstance().neo4j_to_json(neo4j_result_field(result, 0))["properties"];
 
                 std::string str_city = station["city"].get<std::string>();
                 std::string str_station = station["station"].get<std::string>();

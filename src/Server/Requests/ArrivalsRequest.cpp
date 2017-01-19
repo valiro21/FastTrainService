@@ -2,6 +2,7 @@
 // Created by vrosca on 12/23/16.
 //
 
+#include <DatabaseUtils.hpp>
 #include "ArrivalsRequest.hpp"
 #include "DatabaseManager.h"
 #include "Utils.hpp"
@@ -20,10 +21,10 @@ std::string ArrivalsRequest::solve (json request) {
         try {
             while (result != NULL) {
                 Logger::GetInstance().logd("Reached");
-                json station = Utils::GetInstance().neo4j_to_json(neo4j_result_field(result, 0))["properties"];
-                json train = Utils::GetInstance().neo4j_to_json(neo4j_result_field(result, 1))["properties"];
-                json to_train = Utils::GetInstance().neo4j_to_json(neo4j_result_field(result, 2))["properties"];
-                json to_station = Utils::GetInstance().neo4j_to_json(neo4j_result_field(result, 3))["properties"];
+                json station = DatabaseUtils::GetInstance().neo4j_to_json(neo4j_result_field(result, 0))["properties"];
+                json train = DatabaseUtils::GetInstance().neo4j_to_json(neo4j_result_field(result, 1))["properties"];
+                json to_train = DatabaseUtils::GetInstance().neo4j_to_json(neo4j_result_field(result, 2))["properties"];
+                json to_station = DatabaseUtils::GetInstance().neo4j_to_json(neo4j_result_field(result, 3))["properties"];
 
                 std::string str_city = station["city"].get<std::string>();
                 std::string str_station = station["station"].get<std::string>();

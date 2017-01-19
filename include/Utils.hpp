@@ -11,7 +11,6 @@
 #include <bits/ios_base.h>
 #include <regex>
 #include <unistd.h>
-#include <neo4j-client.h>
 #include "json/json.hpp"
 
 using json = nlohmann::json;
@@ -35,10 +34,6 @@ public:
     void WriteJSON (int fd, json message) throw(std::ios_base::failure);
 
     std::string repair_json_string (std::string str);
-#ifdef NEO4J_CLIENT_H
-    std::string neo4j_raw_string (neo4j_value_t value);
-    json neo4j_to_json (neo4j_value_t value);
-#endif
     std::string getErrorJSONString(std::string error);
 };
 

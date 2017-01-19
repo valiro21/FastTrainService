@@ -81,45 +81,6 @@ std::string Utils::repair_json_string (std::string str) {
     return std::regex_replace(str, regexp, "\"$1\":");
 }
 
-#ifdef NEO4J_CLIENT_H
-std::string Utils::neo4j_raw_string (neo4j_value_t value) {
-    char *buf = new char[2048];
-    size_t nr;
-    if ((nr = neo4j_ntostring(value, buf, 2048)) > 2048) {
-        delete[] buf;
-        buf = new char[nr+2];
-        neo4j_ntostring(value, buf, 2048);
-    }
-    std::string result = buf;
-    delete[] buf;
-    return result;
-}
-
-json Utils::neo4j_to_json (neo4j_value_t value) {
-    if (neo4j_type(value) == NEO4J_NODE) {
-        neo4j_value_t value1 = neo4j_node_labels(value),
-                value2 = neo4j_node_properties(value);
-        json result;
-        result.emplace ("types", json::parse(Utils::repair_json_string(Utils::neo4j_raw_string(value1))));
-        result.emplace ("properties", json::parse(Utils::repair_json_string(Utils::neo4j_raw_string(value2))));
-
-        return result;
-    }
-    else if (neo4j_type(value)) {
-        neo4j_value_t value1 = neo4j_relationship_type(value),
-                value2 = neo4j_relationship_properties(value);
-        json result;
-        result.emplace ("types", json::parse(Utils::repair_json_string(Utils::neo4j_raw_string(value1))));
-        result.emplace ("properties", json::parse(Utils::repair_json_string(Utils::neo4j_raw_string(value2))));
-
-        return result;
-    }
-    else {
-        return json();
-    }
-}
-#endif
-
 std::string Utils::getErrorJSONString(std::string error) {
     return "{\"error\": \"" + error + "\"}";
 }

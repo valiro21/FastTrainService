@@ -22,8 +22,11 @@ void init_constraints () {
 
     exists_constraints.push_back("(t:TRAN_TO_DEST) ASSERT exists(t.arrival)");
     exists_constraints.push_back("(t:DEST_TO_TRAIN) ASSERT exists(t.desparture)");
-}
 
+    exists_constraints.push_back("(train:Train) ASSERT exists(train.origin)");
+    exists_constraints.push_back("(train:Train) ASSERT exists(train.endpoint)");
+    exists_constraints.push_back("(train:Train) ASSERT exists(train.delay)");
+}
 
 int DatabaseManager::initDB() {
     DatabaseManager::connection_string = "neo4j://" +
@@ -44,7 +47,6 @@ int DatabaseManager::initDB() {
     for (auto i : exists_constraints) {
         query("CREATE CONSTRAINT ON " + i, [](neo4j_result_stream_t *result_stream){});
     }
-
 
     return EXIT_SUCCESS;
 }

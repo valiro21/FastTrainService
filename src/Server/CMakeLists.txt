@@ -6,6 +6,7 @@ set(SOURCE_FILES
         ${SOURCE_FILES}
         main.cpp
         Server.cpp
+        DatabaseUtils.cpp
         ClientThread.cpp ClientThread.hpp
         RequestsPool.cpp RequestsPool.hpp
         RequestWorker.cpp RequestWorker.hpp
