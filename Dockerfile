@@ -15,4 +15,8 @@ RUN wget https://cmake.org/files/v3.7/cmake-${CMAKE_VERSION}.tar.gz && \
 RUN ln -s /usr/bin/make /usr/bin/gmake
 RUN ln -s /usr/bin/cc /usr/local/bin/cc
 RUN ln -s /usr/bin/g++ /usr/local/bin/g++
-
+COPY ./ /FastTrainService
+RUN cd /FastTrainService && cmake -DCMAKE_BUILD_TYPE=Release ./ && make
+RUN cp /FastTrainService/bin/Release/FastTrainServer ./
+EXPOSE 8181
+CMD /FastTrainService
