@@ -11,6 +11,10 @@
 #include "Server/DatabaseManager.h"
 
 Server::Server (std::string host, int port) throw(std::ios_base::failure) {
+    if (port == 0) {
+        port = 8181;
+        Logger::GetInstance() << "Defaulting to port " << port << '\n';
+    }
     struct sockaddr_in svr_addr;
 
     //create socket
