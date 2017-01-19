@@ -1,0 +1,14 @@
+//
+// Created by vrosca on 1/19/17.
+//
+
+#ifndef FASTTRAINSERVICE_INFORMATIONPANEL_HPP
+#define FASTTRAINSERVICE_INFORMATIONPANEL_HPP
+
+
+class InformationPanel {
+
+};
+
+
+#endif //FASTTRAINSERVICE_INFORMATIONPANEL_HPP
