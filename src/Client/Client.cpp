@@ -9,7 +9,10 @@
 #include <Utils.hpp>
 #include <QLocation>
 #include <QtPositioning/QGeoLocation>
+#include <Logger.hpp>
 #include "Client.hpp"
+#include "ActionSelector.hpp"
+#include "DateSelector.hpp"
 
 Client* Client::instance = nullptr;
 
@@ -65,7 +68,6 @@ Client& Client::GetInstance () {
 }
 
 std::vector<std::string> Client::autocompleteUpdate (std::string text) {
-
     json request;
     request["action"] = "autocomplete";
     request["prefix"] = "text";
@@ -73,8 +75,8 @@ std::vector<std::string> Client::autocompleteUpdate (std::string text) {
     request["latitude"] = getLatitude ();
 
     try {
-        Utils::GetInstance().WriteJson(sock_fd, request);
-        json response = Utils::GetInstance().ReadJson(sock_fd);
+        Utils::GetInstance().WriteJSON(sock_fd, request);
+        json response = Utils::GetInstance().ReadJSON(sock_fd);
         std::vector<std::string> res = response.get<std::vector<std::string> >();
         return res;
     }
@@ -87,5 +89,39 @@ std::vector<std::string> Client::autocompleteUpdate (std::string text) {
 }
 
 void Client::search () {
+    Calendar time = DateSelector::GetInstance ().getSelectedCalendar();
 
+    searchPromise = std::promise<json> ();
+    auto producer = std::thread ([this]() {
+        json request;
+
+        std::string action;
+        if (ActionSelector::GetInstance().getCurrentTab() == 0) {
+            request["action"] = "departures";
+            request["station"] = ActionSelector::GetInstance().getOriginCity();
+        }
+        else if (ActionSelector::GetInstance().getCurrentTab() == 1) {
+            request["action"] = "arrivals";
+            request["station"] = ActionSelector::GetInstance().getEndCity();
+        }
+        else {
+            request["action"] = "path";
+            request["station_start"] = ActionSelector::GetInstance().getOriginCity();
+            request["station_destination"] = ActionSelector::GetInstance().getEndCity();
+        }
+        //get client selected date
+        request["calendar"] = DateSelector::GetInstance().getSelectedCalendar().toJSON();
+
+        try {
+            Utils::GetInstance().WriteJSON(sock_fd, request);
+            searchPromise.set_value(Utils::GetInstance().ReadJSON(sock_fd));
+        }
+        catch (std::ios_base::failure &e) {
+            Logger::GetInstance().logd (e.what());
+            json response;
+            response["error"] = "Failed to connect to server!";
+            searchPromise.set_value(response);
+        }
+    });
+    producer.detach();
 }

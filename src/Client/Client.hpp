@@ -10,6 +10,10 @@
 #include <vector>
 #include <JThread.hpp>
 #include <atomic>
+#include <future>
+#include <json/json.hpp>
+
+using json = nlohmann::json;
 
 class Client : public JThread{
 private:
@@ -18,6 +22,7 @@ private:
     int sock_fd;
     std::atomic<double> latitude, longitude;
 public:
+    std::promise< json> searchPromise;
     void run ();
     void updateLocation ();
     double getLongitude ();
