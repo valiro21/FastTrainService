@@ -50,5 +50,5 @@ FastTrainService.cbp
 /src/Client/moc_*
 /src/Client/__/
 /database-*
-/bin
+bin/
 lib/googletest
