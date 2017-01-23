@@ -1,0 +1,16 @@
+version: '2'
+services:
+ server:
+  image: valiro21/fasttrainservice
+  ports:
+   - 8181:8181
+  links:
+   - db:db
+ db:
+   image: neo4j:3.0
+   ports:
+    - 7474:7474
+    - 7687:7687
+   volumes:
+    - ./database-data:/data
+    - ./database-logs:/logs

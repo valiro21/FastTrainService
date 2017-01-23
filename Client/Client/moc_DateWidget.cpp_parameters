@@ -1,0 +1,5 @@
+-I/home/vrosca/facultate/an2/seminarii/retele/teme_obligatorii/FastTrainService/Client/Client
+-DDEBUG
+-o
+/home/vrosca/facultate/an2/seminarii/retele/teme_obligatorii/FastTrainService/Client/Client/moc_DateWidget.cpp
+/home/vrosca/facultate/an2/seminarii/retele/teme_obligatorii/FastTrainService/Client/Client/DateWidget.hpp

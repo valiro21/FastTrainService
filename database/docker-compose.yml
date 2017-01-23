@@ -1,0 +1,10 @@
+version: '2'
+services:
+ db:
+   image: valiro21/fasttrainservice-database:latest
+   ports:
+    - 7474:7474
+    - 7687:7687
+   volumes:
+    - ./database-data:/data
+    - ./database-logs:/logs

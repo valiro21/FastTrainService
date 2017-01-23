@@ -1,0 +1,6 @@
+-I/home/vrosca/facultate/an2/seminarii/retele/teme_obligatorii/FastTrainService/include
+-I/home/vrosca/facultate/an2/seminarii/retele/teme_obligatorii/FastTrainService/src
+-I/home/vrosca/facultate/an2/seminarii/retele/teme_obligatorii/FastTrainService/src/Client
+-o
+/home/vrosca/facultate/an2/seminarii/retele/teme_obligatorii/FastTrainService/src/Client/__/__/__/__/__/__/__/__/__/__/moc_MainWindow.cpp
+/MainWindow.h

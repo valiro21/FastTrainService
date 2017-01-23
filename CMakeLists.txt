@@ -1,10 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 project(FastTrainService)
 
-set(CMAKE_CXX_STANDARD 11)
-
-include_directories(include)
-include_directories(src)
+set(CMAKE_CXX_STANDARD 14)
 
 if(CMAKE_BUILD_TYPE EQUAL "Release")
     add_definitions(-DRELEASE)
@@ -12,11 +9,9 @@ else()
     add_definitions(-DDEBUG)
 endif()
 
-file(GLOB SOURCE_FILES include/*.hpp )
-file(GLOB SOURCE_FILES src/*.cpp )
-add_subdirectory("src/Server")
-
-set (SOURCE_FILES )
-file(GLOB SOURCE_FILES include/*.hpp )
-file(GLOB SOURCE_FILES src/*.cpp )
-add_subdirectory("src/Client")
+add_subdirectory("lib/googletest")
+add_subdirectory("Utils")
+add_subdirectory("TrainProvider")
+add_subdirectory("TrainProvider_tests")
+add_subdirectory("Server")
+add_subdirectory("Client/Client")

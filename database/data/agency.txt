@@ -1,0 +1,6 @@
+agency_id,agency_name,agency_url,agency_timezone
+236037,Interregional Calatori,http://www.viaterraspedition.ro/,Europe/Bucharest
+227098,Regiotrans,http://www.regiotrans.ro/,Europe/Bucharest
+6100826,CFR Călători,http://www.cfrcalatori.ro/,Europe/Bucharest
+236025,Softrans,http://softrans.ro/,Europe/Bucharest
+228389,Transferoviar Calatori,http://www.transferoviarcalatori.ro/,Europe/Bucharest
