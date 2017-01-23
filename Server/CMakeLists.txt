@@ -6,7 +6,7 @@ set(SOURCE_FILES
         ${SOURCE_FILES}
         src/main.cpp
         src/Server.cpp
-        src/ClientThread.cpp ../TrainProvider_tests/database_tests.cpp)
+        src/ClientThread.cpp)
 
 set(EXECUTABLE_OUTPUT_PATH bin/${CMAKE_BUILD_TYPE})
 
