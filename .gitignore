@@ -49,6 +49,6 @@ FastTrainService.cbp
 #qt
 /src/Client/moc_*
 /src/Client/__/
-/bin
 /database-*
 /bin
+lib/googletest
