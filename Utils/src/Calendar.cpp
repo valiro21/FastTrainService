@@ -142,6 +142,19 @@ json Calendar::toJSON () {
     return calendar;
 }
 
+Calendar Calendar::fromJSON (json json_calendar) {
+    Calendar calendar;
+
+    calendar.set(json_calendar["year"].get<int>(), Calendar::YEAR);
+    calendar.set(json_calendar["month"].get<int>(), Calendar::MONTH);
+    calendar.set(json_calendar["day"].get<int>(), Calendar::DAY);
+    calendar.set(json_calendar["hour"].get<int>(), Calendar::HOUR);
+    calendar.set(json_calendar["minute"].get<int>(), Calendar::MINUTE);
+    calendar.set(json_calendar["second"].get<int>(), Calendar::SECOND);
+
+    return calendar;
+}
+
 int Calendar::getDayOfWeek () const {
     int k = day;
     int m = month - 2;

@@ -45,6 +45,7 @@ public:
     std::string to_string ();
 
     json toJSON ();
+    static Calendar fromJSON (json json_calendar);
 
     int getDayOfWeek () const;
     std::string getDayName ();
