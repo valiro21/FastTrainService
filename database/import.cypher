@@ -46,7 +46,8 @@ USING PERIODIC COMMIT
 LOAD CSV WITH HEADERS FROM "file:/tmp/data/trips.txt" AS row
 CREATE(trip:Trip{
   id: row.trip_id,
-  ShortName: row.trip_short_name
+  ShortName: row.trip_short_name,
+  delay: 0
 })
 WITH trip, row
 MATCH (route:Route{id: row.route_id})
@@ -59,10 +60,26 @@ USING PERIODIC COMMIT
 LOAD CSV WITH HEADERS FROM "file:/tmp/data/stop_times.txt" AS row
 MATCH (trip:Trip{id: row.trip_id}), (stop:Stop{id:row.stop_id})
 WHERE row.arrival_time is not null
-MERGE (trip)-[:TO_STOP{arrival:row.arrival_time}]->(stop);
+MERGE (trip)-[:TO_STOP{
+arrival: toInteger(substring(row.arrival_time,0,2)) * 60 * 60 + toInteger(substring(row.arrival_time, 3, 2)) * 60 + toInteger (substring(row.arrival_time, 6, 2))
+}]->(stop);
 
 USING PERIODIC COMMIT
 LOAD CSV WITH HEADERS FROM "file:/tmp/data/stop_times.txt" AS row
 MATCH (trip:Trip{id: row.trip_id}), (stop:Stop{id:row.stop_id})
 WHERE row.departure_time is not null
-MERGE (stop)-[:TO_TRIP{departure:row.departure_time}]->(trip);
+MERGE (stop)-[:TO_TRIP{
+departure: toInteger(substring(row.departure_time,0,2)) * 60 * 60 + toInteger(substring(row.departure_time, 3, 2)) * 60 + toInteger (substring(row.departure_time, 6, 2))
+}]->(trip);
+
+USING PERIODIC COMMIT
+LOAD CSV WITH HEADERS FROM "file:/tmp/data/stop_times.txt" AS row
+MATCH (trip:Trip{id: row.trip_id})-[:FOR]->(route:Route), (stop:Stop{id:row.stop_id})
+WHERE row.arrival_time is null
+MERGE (route)-[:STARTS_AT]->(stop);
+
+USING PERIODIC COMMIT
+LOAD CSV WITH HEADERS FROM "file:/tmp/data/stop_times.txt" AS row
+MATCH (trip:Trip{id: row.trip_id})-[:FOR]->(route:Route), (stop:Stop{id:row.stop_id})
+WHERE row.departure_time is null
+MERGE (route)-[:ENDS_AT]->(stop);
