@@ -20,4 +20,4 @@ ratings:
   - "Server/src/*.hpp"
   - "Server/src/*.cpp"
   - "Server/include/*.hpp"
-exclude_paths: ["TrainProvider_test/", "lib/", "database-*/"]
+exclude_paths: ["TrainProvider_test/", "lib/", "database-*/", "Client/", "*.txt", "CMakeLists/", "*.yml", "docs/"]
