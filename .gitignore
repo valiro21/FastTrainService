@@ -39,7 +39,6 @@ Makefile
 cmake_install.cmake
 install_manifest.txt
 compile_commands.json
-CTestTestfile.cmake
 
 #CLion
 cmake-build-debug
@@ -47,8 +46,8 @@ cmake-build-debug
 FastTrainService.cbp
 
 #qt
-/src/Client/moc_*
-/src/Client/__/
+Client/moc_*
+Client/__/
 /database-*
 bin/
 lib/googletest
