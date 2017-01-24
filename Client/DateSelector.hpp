@@ -9,23 +9,17 @@
 #include <QtWidgets/QVBoxLayout>
 #include <QComboBox>
 #include <JThread.hpp>
-#include "Calendar.hpp"
-#include "HourWidget.hpp"
-#include "DateWidget.hpp"
+#include <Calendar.hpp>
+#include <QtWidgets/QDateTimeEdit>
 
 class DateSelector : public QWidget {
 private:
     DateSelector (QWidget *parent = 0);
     static DateSelector *instance;
-    DateWidget *dateBox;
-    HourWidget *hoursBox;
-    JThread* update_thread;
-
+    QDateTimeEdit *qDateTime;
 public:
-    std::vector<Calendar> days;
     static DateSelector& GetInstance (QWidget *parent = 0);
-    Calendar& getSelectedCalendar ();
-    void updateDate ();
+    Calendar getSelectedCalendar ();
 };
 
 

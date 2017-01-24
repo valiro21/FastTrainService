@@ -9,22 +9,13 @@
 
 DateSelector::DateSelector (QWidget *parent) : QWidget(parent) {
     QVBoxLayout *layout = new QVBoxLayout();
-    hoursBox = new HourWidget();
-    dateBox = new DateWidget();
-    dateBox->setHoursBox(hoursBox);
-    hoursBox->updateDate(true);
-    updateDate();
     layout->addWidget(new QLabel("Date:"));
-    layout->addWidget(dateBox);
-    layout->addWidget(new QLabel("Search for trains after hour:"));
-    layout->addWidget(hoursBox);
+    qDateTime = new QDateTimeEdit();
+    qDateTime->setDate(QDate::currentDate());
+    qDateTime->setTime(QTime::currentTime());
+    qDateTime->setCalendarPopup(true);
+    layout->addWidget(qDateTime);
     setLayout(layout);
-
-    unsigned int remaining_time =  (60 - Calendar().get(Calendar::MINUTE)) * 60 * 1000  + (60 - Calendar().get(Calendar::SECOND)) * 1000;
-
-    // hourly update
-    update_thread = new ScheduleThread ([this](){this->updateDate();}, remaining_time, 60*60*1000);
-    update_thread->start ();
 }
 
 DateSelector* DateSelector::instance = 0;
@@ -36,42 +27,23 @@ DateSelector& DateSelector::GetInstance (QWidget *parent) {
     return *instance;
 }
 
-Calendar& DateSelector::getSelectedCalendar () {
-    Calendar *result = new Calendar();
+Calendar DateSelector::getSelectedCalendar () {
+    QDate selectedDate = qDateTime->date();
+    QTime selectedTime = qDateTime->time();
 
-    *result = days[dateBox->currentIndex()];
+    int year, month, day;
+    selectedDate.getDate(&year, &month, &day);
+    int hour = selectedTime.hour();
+    int minute = selectedTime.minute();
+    int second = selectedTime.second();
 
-    std::string selected_hour = hoursBox->currentText().toStdString();
-    if (selected_hour.size () == 0) {
-        return *new Calendar();
-    }
-    else if (!('0'<= selected_hour[0] && selected_hour[0] <= '9') ) {
-        return *new Calendar ();
-    }
-    else {
-        int hour = std::stoi(selected_hour);
-        result->set(hour, Calendar::HOUR);
-        result->set(0, Calendar::MINUTE);
-        result->set(0, Calendar::SECOND);
-    }
-    return *result;
-}
-
-void DateSelector::updateDate () {
     Calendar c;
-    QStringList dates = QStringList();
-    days.clear ();
-    for (int i = 0; i < 7; i++) {
-        dates << c.to_string().c_str();
-        days.emplace_back (c);
-        c.add(1, Calendar::DAY);
-    }
+    c.set(second, Calendar::SECOND);
+    c.set(minute, Calendar::MINUTE);
+    c.set(hour, Calendar::HOUR);
+    c.set(day, Calendar::DAY);
+    c.set(month, Calendar::MONTH);
+    c.set(year, Calendar::YEAR);
 
-    QStringListModel *dateModel = new QStringListModel();
-    dateModel->setStringList(dates);
-    int currentIndex = dateBox->currentIndex();
-    dateBox->setModel(dateModel);
-    if (currentIndex > 0) currentIndex--;
-    else currentIndex = 0;
-    dateBox->setCurrentIndex(currentIndex);
+    return c;
 }
