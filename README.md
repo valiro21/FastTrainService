@@ -6,6 +6,7 @@ A C++ application for managing train arrivals, departures and routes
 [![Docker Pulls](https://img.shields.io/docker/pulls/valiro21/fasttrainservice.svg)](https://hub.docker.com/r/valiro21/fasttrainservice/)
 [![Docker Build](https://img.shields.io/docker/automated/valiro21/fasttrainservice.svg)](https://hub.docker.com/r/valiro21/fasttrainservice/builds/)
 [![license](https://img.shields.io/github/license/valiro21/fasttrainservice.svg)](LICENSE.MD)
+[![Docker Repository on Quay](https://quay.io/repository/valiro21/fasttrainserver/status "Docker Repository on Quay")](https://quay.io/repository/valiro21/fasttrainserver)
 
 
 
