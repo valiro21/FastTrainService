@@ -13,7 +13,7 @@ class ProviderFactory {
 private:
     static ProviderFactory* instance;
 public:
-    Provider* produce (json);
+    Provider* produce (json request);
     static ProviderFactory& GetInstance();
 };
 

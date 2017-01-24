@@ -20,7 +20,7 @@ class DatabaseManager {
 public:
     static DatabaseManager& GetInstance ();
     int init (std::string host = "", int port = 0);
-    int query (std::string queryStr, std::function<void(neo4j_result_stream_t*)> process_data);
+    void query (std::string queryStr, std::function<void(neo4j_result_stream_t*)> process_data) throw(std::ios_base::failure);
 };
 
 

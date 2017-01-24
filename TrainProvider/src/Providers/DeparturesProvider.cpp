@@ -4,14 +4,10 @@
 
 #include "DeparturesProvider.hpp"
 
-DeparturesProvider::DeparturesProvider (std::string station, std::string city, std::string country, long long time) {
-    std::string str_time = std::to_string(time);
-    query = std::string() + "MATCH (a:Station)-[t1:DEST_TO_TRAIN]->(t:Train)-[t2:TRAIN_TO_DEST]->(b:Station) WHERE "
-            + "a.city='" + city + "' AND "
-            + "a.station='" + station + "' "
-            + "a.country='" + country + "' "
-            + "t1.arrival < " + str_time + " "
-            + "RETURN b, t, t2";
+DeparturesProvider::DeparturesProvider (std::string station, std::string country, Calendar calendar) {
+    std::string dayName = calendar.getDayName();
+    query = "MATCH (a:Stop{name: '" + station+ "'})-[t:TO_TRIP]->(tr:Trip)-[:FOR]->(r:Route)-[:ENDS_AT]->(b:Stop), (tr)-[:HAS]->(s:Service{"
+        + dayName +": '1'}) RETURN r, b, t, tr;";
 }
 
 json DeparturesProvider::provide (neo4j_result_stream_t * result_stream) {
@@ -21,21 +17,21 @@ json DeparturesProvider::provide (neo4j_result_stream_t * result_stream) {
 
     while (result != NULL) {
         json json_response_piece;
-        json station = DatabaseUtils::GetInstance().neo4j_to_json(neo4j_result_field(result, 0))["properties"];
-        json train = DatabaseUtils::GetInstance().neo4j_to_json(neo4j_result_field(result, 1))["properties"];
-        json to_train = DatabaseUtils::GetInstance().neo4j_to_json(neo4j_result_field(result, 3))["properties"];
+        json route = DatabaseUtils::GetInstance().neo4j_to_json(neo4j_result_field(result, 0))["properties"];
+        json endpoint = DatabaseUtils::GetInstance().neo4j_to_json(neo4j_result_field(result, 1))["properties"];
+        json edge = DatabaseUtils::GetInstance().neo4j_to_json(neo4j_result_field(result, 2))["properties"];
+        json trip = DatabaseUtils::GetInstance().neo4j_to_json(neo4j_result_field(result, 3))["properties"];
 
-
-        json_response_piece["station"] = station["station"].get<std::string>();
-        json_response_piece["origin"] = train["origin"].get<std::string>();
-        json_response_piece["endpoint"] = train["endpoint"].get<std::string>();
-        json_response_piece["departure"] = to_train["departure"];
+        json_response_piece["route"] = route;
+        json_response_piece["endpoint"] = endpoint;
+        json_response_piece["departure"] = edge["departure"];
+        json_response_piece["delay"] = trip["delay"];
 
         pieces.push_back(json_response_piece);
         result = neo4j_fetch_next(result_stream);
     }
 
-    json_response["result"] = json(pieces);
+    json_response = json(pieces);
     pieces.clear();
     return json_response;
 }

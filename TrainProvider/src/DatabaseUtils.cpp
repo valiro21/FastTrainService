@@ -2,6 +2,7 @@
 // Created by vrosca on 1/19/17.
 //
 
+#include <Logger.hpp>
 #include "Utils.hpp"
 #include "DatabaseUtils.hpp"
 DatabaseUtils* DatabaseUtils::singleton = NULL;
@@ -33,7 +34,6 @@ json DatabaseUtils::neo4j_to_json (neo4j_value_t value) {
         json result;
         result.emplace ("types", json::parse(Utils::GetInstance().repair_json_string(DatabaseUtils::neo4j_raw_string(value1))));
         result.emplace ("properties", json::parse(Utils::GetInstance().repair_json_string(DatabaseUtils::neo4j_raw_string(value2))));
-
         return result;
     }
     else if (neo4j_type(value)) {

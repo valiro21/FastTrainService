@@ -3,10 +3,11 @@
 //
 
 #include <vector>
+#include <bits/ios_base.h>
 #include "../include/DatabaseManager.hpp"
 
 std::string DatabaseManager::user = "neo4j";
-std::string DatabaseManager::pass = "train1234";
+std::string DatabaseManager::pass = "train12345";
 #ifdef RELEASE
 std::string DatabaseManager::default_hostname = "db";
 #else
@@ -36,34 +37,36 @@ int DatabaseManager::init(std::string hostname, int port) {
                                             std::to_string(db_port);
     neo4j_client_init();
 
+    auto connection = neo4j_connect(DatabaseManager::connection_string.c_str(), NULL, NEO4J_INSECURE);
+    if (connection == NULL)
+        return EXIT_FAILURE;
+    else
+        neo4j_close(connection);
+
     return EXIT_SUCCESS;
 }
 
-int DatabaseManager::query (std::string queryStr, std::function<void(neo4j_result_stream_t*)> process_data) {
+void DatabaseManager::query (std::string queryStr, std::function<void(neo4j_result_stream_t*)> process_data) throw(std::ios_base::failure) {
     DatabaseManager::connection =
             neo4j_connect(DatabaseManager::connection_string.c_str(), NULL, NEO4J_INSECURE);
 
     if (connection == NULL) {
-        neo4j_perror(stderr, errno, "Connection failed");
-        return EXIT_FAILURE;
+        char buf[1024];
+        throw std::ios_base::failure(std::string("Connection failed: ") + neo4j_strerror(errno, buf, sizeof(buf)));
     }
 
     neo4j_session_t *session = neo4j_new_session(DatabaseManager::connection);
     if (session == NULL) {
-        neo4j_perror(stderr, errno, "Failed to start session");
-        return EXIT_FAILURE;
-    }
+        char buf[1024];
 
-    if (session == NULL) {
-        neo4j_perror(stderr, errno, "Failed to start session");
-        return EXIT_FAILURE;
+        throw std::ios_base::failure(std::string("Failed to start session: ") + neo4j_strerror(errno, buf, sizeof(buf)));
     }
 
     neo4j_result_stream_t *results = neo4j_run (session, queryStr.c_str(), neo4j_null);
 
     if (results == NULL) {
-        neo4j_perror(stderr, errno, "Failed to run statement");
-        return EXIT_FAILURE;
+        char buf[1024];
+        throw std::ios_base::failure(std::string("Failed to run statement: ") + neo4j_strerror(errno, buf, sizeof(buf)));
     }
 
     process_data(results);
@@ -72,6 +75,4 @@ int DatabaseManager::query (std::string queryStr, std::function<void(neo4j_resul
     neo4j_reset_session(session);
     neo4j_end_session(session);
     neo4j_close(DatabaseManager::connection);
-
-    return EXIT_SUCCESS;
 }

@@ -23,15 +23,13 @@ Provider* ProviderFactory::produce (json request) {
         if (action == "arrivals")
             return new ArrivalsProvider(
                     request["station"].get<std::string>(),
-                    request["city"].get<std::string>(),
                     request["country"].get<std::string>(),
-                    request["time"]);
+                    Calendar::fromJSON(request["time"]));
         else if (action == "departures")
             return new DeparturesProvider(
                     request["station"].get<std::string>(),
-                    request["city"].get<std::string>(),
                     request["country"].get<std::string>(),
-                    request["time"]);
+                    Calendar::fromJSON(request["time"]));
         else if (action == "autocomplete")
             return new AutocompleteProvider(
                     request["prefix"].get<std::string>(),

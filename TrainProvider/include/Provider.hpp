@@ -18,7 +18,7 @@ class Provider {
 protected:
     virtual json provide(neo4j_result_stream_t *result_stream) {
         return json ();
-    };
+    }
     std::string query;
 public:
     json execute ();

@@ -10,7 +10,7 @@
 
 class AutocompleteProvider : public Provider {
 public:
-    json provide (neo4j_result_stream_t * result_stream);
+    json provide (neo4j_result_stream_t *stream);
     AutocompleteProvider (std::string prefix, float geo_lat, float geo_lng);
 };
 
