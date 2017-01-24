@@ -13,11 +13,11 @@ ratings:
   paths:
   - "Utils/include/*.hpp"
   - "Utils/src/*.hpp"
-  - "Utils/src/*.hpp"
+  - "Utils/src/*.cpp"
   - "TrainProvider/include/*.hpp"
   - "TrainProvider/src/*.hpp"
-  - "TrainProvider/src/*.hpp"
+  - "TrainProvider/src/*.cpp"
   - "Server/src/*.hpp"
-  - "Server/src/*.hpp"
+  - "Server/src/*.cpp"
   - "Server/include/*.hpp"
 exclude_paths: ["TrainProvider_test/", "lib/", "database-*/"]
