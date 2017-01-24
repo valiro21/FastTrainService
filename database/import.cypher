@@ -11,6 +11,7 @@ LOAD CSV WITH HEADERS FROM "file:/tmp/data/stops.txt" AS row
 CREATE (:Stop {
   name: row.stop_name,
   id: row.stop_id,
+  country: "Romania",
   lat: row.stop_lat,
   lng: row.stop_lon});
 
@@ -27,23 +28,41 @@ MATCH (agency:Agency{id: row.agency_id})
 MERGE (route)-[:BELONGS_TO]->(agency);
 
 USING PERIODIC COMMIT
+LOAD CSV WITH HEADERS FROM "file:/tmp/data/calendar.txt" AS row
+CREATE(service:Service{
+  id: row.service_id,
+  monday: row.monday,
+  tuesday: row.tuesday,
+  wednesday: row.wednesday,
+  thursday: row.thursday,
+  friday: row.friday,
+  saturday: row.saturday,
+  sunday: row.sunday,
+  start: row.start_date,
+  end: row.end_date
+});
+
+USING PERIODIC COMMIT
 LOAD CSV WITH HEADERS FROM "file:/tmp/data/trips.txt" AS row
-CREATE(train:Train{
+CREATE(trip:Trip{
   id: row.trip_id,
   ShortName: row.trip_short_name
 })
-WITH train, row
+WITH trip, row
 MATCH (route:Route{id: row.route_id})
-MERGE (train)-[:HAS]->(route);
+MERGE (trip)-[:FOR]->(route)
+WITH trip, row
+MATCH (service:Service{id: row.service_id})
+MERGE (trip)-[:HAS]->(service);
 
 USING PERIODIC COMMIT
 LOAD CSV WITH HEADERS FROM "file:/tmp/data/stop_times.txt" AS row
-MATCH (train:Train{id: row.trip_id}), (stop:Stop{id:row.stop_id})
+MATCH (trip:Trip{id: row.trip_id}), (stop:Stop{id:row.stop_id})
 WHERE row.arrival_time is not null
-MERGE (train)-[:TO_STOP{arrival:row.arrival_time}]->(stop);
+MERGE (trip)-[:TO_STOP{arrival:row.arrival_time}]->(stop);
 
 USING PERIODIC COMMIT
 LOAD CSV WITH HEADERS FROM "file:/tmp/data/stop_times.txt" AS row
-MATCH (train:Train{id: row.trip_id}), (stop:Stop{id:row.stop_id})
+MATCH (trip:Trip{id: row.trip_id}), (stop:Stop{id:row.stop_id})
 WHERE row.departure_time is not null
-MERGE (stop)-[:TO_TRAIN{departure:row.departure_time}]->(train);
+MERGE (stop)-[:TO_TRIP{departure:row.departure_time}]->(trip);
