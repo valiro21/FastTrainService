@@ -1,24 +1,23 @@
----
 engines:
   duplication:
     enabled: true
     config:
       languages:
-      - ruby
-      - javascript
-      - python
-      - php
+      - C++
+      - Cypher
   fixme:
     enabled: true
   radon:
     enabled: true
 ratings:
   paths:
-  - "**.inc"
-  - "**.js"
-  - "**.jsx"
-  - "**.module"
-  - "**.php"
-  - "**.py"
-  - "**.rb"
-exclude_paths: []
+  - "Utils/include/*.hpp"
+  - "Utils/src/*.hpp"
+  - "Utils/src/*.hpp"
+  - "TrainProvider/include/*.hpp"
+  - "TrainProvider/src/*.hpp"
+  - "TrainProvider/src/*.hpp"
+  - "Server/src/*.hpp"
+  - "Server/src/*.hpp"
+  - "Server/include/*.hpp"
+exclude_paths: ["TrainProvider_test/", "lib/", "database-*/"]
