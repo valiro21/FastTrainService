@@ -3,7 +3,10 @@ project(FastTrainService)
 
 set(CMAKE_CXX_STANDARD 14)
 
+
 add_executable(TrainProvider_tests database_tests.cpp)
 
+include_directories("include")
 target_include_directories(TrainProvider_tests PUBLIC $<TARGET_PROPERTY:gtest,INCLUDE_DIRECTORIES>)
-target_link_libraries(TrainProvider_tests gtest gtest_main)
+target_include_directories(TrainProvider_tests PUBLIC $<TARGET_PROPERTY:TrainProvider,INCLUDE_DIRECTORIES>)
+target_link_libraries(TrainProvider_tests gtest gtest_main TrainProvider)
