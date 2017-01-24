@@ -19,11 +19,11 @@ class Calendar {
     unsigned int month;
     unsigned int year;
 
-    int days_in_month[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-
     int get_days_of_month (int month);
-
+    static int days_in_month[13];
 public:
+
+
     enum {
         SECOND,
         MINUTE,
@@ -34,6 +34,7 @@ public:
     };
 
     Calendar();
+    Calendar(int year, int month, int day, int hour, int minute, int second);
     void add (int val, int type);
 
     bool isLeapYear ();
@@ -44,6 +45,13 @@ public:
     std::string to_string ();
 
     json toJSON ();
+
+    int getDayOfWeek () const;
+    std::string getDayName ();
+
+    long long toUnixTime ();
+
+    static bool isLeapYear (int year);
 };
 
 #endif //FASTTRAINSERVICE_CALENDAR_HPP
