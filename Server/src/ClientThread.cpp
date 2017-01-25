@@ -6,14 +6,14 @@
 void ClientThread::run () {
     try {
         while (true) {
-            json *request = new json();
-            *request = Utils::GetInstance().ReadJSON(*client_fd);
+            json request = json();
+            request = Utils::GetInstance().ReadJSON(*client_fd);
+            Logger::GetInstance().logd(request.dump());
 
             RequestsPool::GetInstance().execute ([request, this]() {
                 Provider *provider = ProviderFactory::GetInstance().produce(request);
                 json response = provider->execute();
                 this->sendResponse(response);
-                delete[] request;
             });
         }
     }
@@ -24,9 +24,9 @@ void ClientThread::run () {
     }
 }
 
-void ClientThread::sendResponse (std::string response) {
+void ClientThread::sendResponse (json response) {
     write_mutex->lock ();
-    Logger::GetInstance().logd("Response: " + response);
-    Utils::GetInstance().Write(*client_fd, response);
+    Logger::GetInstance().logd("Response: " + response.dump());
+    Utils::GetInstance().WriteJSON(*client_fd, response);
     write_mutex->unlock();
 }

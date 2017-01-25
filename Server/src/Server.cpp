@@ -6,7 +6,7 @@
 #include <string.h>
 #include <netinet/in.h>
 #include <algorithm>
-#include "Server.hpp"
+#include "../include/Server.hpp"
 #include "Logger.hpp"
 #include <DatabaseManager.hpp>
 
@@ -35,6 +35,7 @@ Server::Server (std::string host, int port) throw(std::ios_base::failure) {
 }
 
 Server::Server (int port) throw(std::ios_base::failure) {
+    Logger::GetInstance().logd("Binding server on " + std::to_string(port));
     if (port == 0) {
         port = 8181;
         Logger::GetInstance() << "Defaulting to port " << port << '\n';

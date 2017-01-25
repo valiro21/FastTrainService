@@ -2,6 +2,8 @@ project(FastTrainService)
 
 include_directories(include)
 
+add_subdirectory(tests)
+
 set(SOURCE_FILES
         ${SOURCE_FILES}
         src/main.cpp

@@ -1,5 +1,5 @@
 #include <JThread.hpp>
-#include "Server.hpp"
+#include "../include/Server.hpp"
 
 using namespace std;
 
