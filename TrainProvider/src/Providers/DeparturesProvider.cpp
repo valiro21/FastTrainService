@@ -7,7 +7,7 @@
 DeparturesProvider::DeparturesProvider (std::string station, std::string country, Calendar calendar) {
     std::string dayName = calendar.getDayName();
     query = "MATCH (a:Stop{name: '" + station+ "'})-[t:TO_TRIP]->(tr:Trip)-[:FOR]->(r:Route)-[:ENDS_AT]->(b:Stop), (tr)-[:HAS]->(s:Service{"
-        + dayName +": '1'}) RETURN r, b, t, tr;";
+        + dayName +": '1'}), (tr)-[end:TO_STOP]->(b) RETURN r, b, t, end;";
     type = "DeparturesProvider";
 }
 
@@ -21,12 +21,12 @@ json DeparturesProvider::provide (neo4j_result_stream_t * result_stream) {
         json route = DatabaseUtils::GetInstance().neo4j_to_json(neo4j_result_field(result, 0))["properties"];
         json endpoint = DatabaseUtils::GetInstance().neo4j_to_json(neo4j_result_field(result, 1))["properties"];
         json edge = DatabaseUtils::GetInstance().neo4j_to_json(neo4j_result_field(result, 2))["properties"];
-        json trip = DatabaseUtils::GetInstance().neo4j_to_json(neo4j_result_field(result, 3))["properties"];
+        json end_edge = DatabaseUtils::GetInstance().neo4j_to_json(neo4j_result_field(result, 3))["properties"];
 
         json_response_piece["route"] = route;
         json_response_piece["endpoint"] = endpoint;
         json_response_piece["departure"] = edge["departure"];
-        json_response_piece["delay"] = trip["delay"];
+        json_response_piece["arrival"] = end_edge["arrival"];
 
         pieces.push_back(json_response_piece);
         result = neo4j_fetch_next(result_stream);
