@@ -285,4 +285,5 @@ std::string Calendar::toZeroStr (int val) {
         s = "0";
     }
     s += std::to_string(val);
+    return s;
 }

@@ -128,3 +128,8 @@ TEST(CalendarTest, TestDayName1) {
     Calendar c(2017, 1, 22, 20, 50, 7);
     ASSERT_STREQ(c.getDayName().c_str(), "sunday");
 }
+
+TEST(CalendarTest, StringDay) {
+    Calendar c(2017, 1, 22, 20, 50, 7);
+    ASSERT_STREQ(c.getDayTimeStr().c_str(), "20:50:07");
+}
