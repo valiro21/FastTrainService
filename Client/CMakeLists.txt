@@ -9,21 +9,24 @@ find_package( Qt5Widgets REQUIRED )
 find_package( Qt5Gui REQUIRED )
 find_package( Qt5Location REQUIRED )
 
-qt5_wrap_cpp(FastTrainClientWrap CitySelector.hpp)
-qt5_wrap_cpp(FastTrainClientWrap ActionSelector.hpp)
-qt5_wrap_cpp(FastTrainClientWrap SearchButton.hpp)
+qt5_wrap_cpp(FastTrainClientWrap src/CitySelector.hpp)
+qt5_wrap_cpp(FastTrainClientWrap src/Tables/RoutesTable.hpp)
+qt5_wrap_cpp(FastTrainClientWrap src/Tables/DeparturesTable.hpp)
+qt5_wrap_cpp(FastTrainClientWrap src/Tables/ArrivalsTable.hpp)
+qt5_wrap_cpp(FastTrainClientWrap src/ArrivalsTab.hpp)
+qt5_wrap_cpp(FastTrainClientWrap src/DeparturesTab.hpp)
 
 set(SOURCE_FILES
-        ${SOURCE_FILES} main.cpp
-        DateSelector.cpp
-        DateSelector.hpp
-        CitySelector.cpp
+        src/main.cpp
+        src/DateSelector.cpp
+        src/CitySelector.cpp
         ${FastTrainClientWrap}
-        ActionSelector.cpp
-        SearchWidget.cpp
-        Client.cpp
-        SearchButton.cpp
-        InformationPanel.cpp Tables/ArrivalsTable.cpp Tables/ArrivalsTable.hpp Tables/RoutesTable.hpp)
+        src/Client.cpp
+        src/Tables/ArrivalsTable.cpp
+        src/ArrivalsTab.cpp
+        src/DeparturesTab.cpp
+        src/WidgetFactory.cpp
+        src/Tables/DeparturesTable.cpp)
 
 set(EXECUTABLE_OUTPUT_PATH bin/${CMAKE_BUILD_TYPE})
 
