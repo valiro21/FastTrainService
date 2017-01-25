@@ -11,8 +11,6 @@ endif()
 
 add_subdirectory("lib/googletest")
 add_subdirectory("Utils")
-add_subdirectory("Utils_tests")
 add_subdirectory("TrainProvider")
-add_subdirectory("TrainProvider_tests")
 add_subdirectory("Server")
 add_subdirectory("Client")
