@@ -25,3 +25,7 @@ void JThread::notifyAll () {
         i();
     }
 }
+
+void JThread::detach () {
+    proc->detach();
+}

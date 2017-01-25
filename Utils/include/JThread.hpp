@@ -20,6 +20,7 @@ public:
     void start ();
     void join ();
     void attach_lambda(std::function<void()> lambda);
+    void detach ();
 
     virtual void run () = 0;
 };
