@@ -27,25 +27,48 @@ int Calendar::get_days_of_month (int month) {
 }
 
 void Calendar::add (int val, int type) {
-    int tmp_val;
+    int tmp_val, reminder;
     switch (type) {
         case SECOND:
-            tmp_val = this->second + val;
-            this->second = (unsigned int) (tmp_val % 60);
-            this->add(tmp_val / 60, MINUTE);
+            tmp_val = second + val;
+            if (tmp_val < 0) {
+                second = (unsigned int)  (60 + tmp_val % 60);
+                reminder = -1 + tmp_val / 60;
+            }
+            else {
+                second = (unsigned int) (tmp_val % 60);
+                reminder = tmp_val / 60;
+            }
+
+            add(reminder, MINUTE);
             break;
         case MINUTE:
-            tmp_val = this->minute + val;
-            this->minute = (unsigned int) (tmp_val % 60);
-            this->add(tmp_val / 60, HOUR);
+            tmp_val = minute + val;
+            if (tmp_val < 0) {
+                minute = (unsigned int)  (60 + tmp_val % 60);
+                reminder = -1 + -tmp_val / 60;
+            }
+            else {
+                minute = (unsigned int) (tmp_val % 60);
+                reminder = tmp_val / 60;
+            }
+
+            add(reminder, HOUR);
             break;
         case HOUR:
-            tmp_val = this->hour + val;
-            this->hour = (unsigned int) (tmp_val % 24);
-            this->add(tmp_val / 24, DAY);
+            tmp_val = hour + val;
+            if (tmp_val < 0) {
+                hour = (unsigned int)  (24 + tmp_val % 24);
+                reminder = -1 + -tmp_val / 24;
+            }
+            else {
+                hour = (unsigned int) (tmp_val % 24);
+                reminder = tmp_val / 24;
+            }
+            add(reminder, DAY);
             break;
         case DAY:
-            tmp_val = this->day + val;
+            tmp_val = day + val;
             while (tmp_val > get_days_of_month(this->month)) {
                 tmp_val -= get_days_of_month(this->month);
                 month++;
@@ -54,7 +77,19 @@ void Calendar::add (int val, int type) {
                     year++;
                 }
             }
-            this->day = (unsigned int) tmp_val;
+
+            while (tmp_val < 1) {
+                unsigned int m = month - 1;
+                if (m == 0) {
+                    m = 12;
+                    year--;
+                }
+
+                tmp_val += get_days_of_month(m);
+                month = m;
+            }
+
+            day = (unsigned int) tmp_val;
             break;
         default:
             return;
@@ -223,7 +258,7 @@ long long Calendar::toUnixTime () {
     return time * 1000;
 }
 
-void Calendar::setDayTimeUnix (unsinged long long time) {
+void Calendar::setDayTimeUnix (unsigned long long time) {
     int h = time / 3600; time -= hour * 3600;
     int m = time / 60;
     int s = time % 60;

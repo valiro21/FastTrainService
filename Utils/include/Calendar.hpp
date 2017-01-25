@@ -54,7 +54,7 @@ public:
 
     static bool isLeapYear (int year);
 
-    void setDayTimeUnix (unsinged long long time);
+    void setDayTimeUnix (unsigned long long time);
 
     unsigned long long getDayTimeUnix ();
 
