@@ -9,23 +9,21 @@
 #include <Utils.hpp>
 #include "InformationPanel.hpp"
 
+InformationPanel* InformationPanel::instance = nullptr;
 
-/*InformationPanel::init () {
-    QVBoxLayout *layout = new QVBoxLayout();
-    QScrollArea * area;
-
-    layout->addWidget();
-
-    area->setLayout(layout);
-
-
-
-
+InformationPanel& InformationPanel::GetInstance (QWidget *parent) {
+    if (instance == nullptr) {
+        instance = new InformationPanel(parent);
+    }
+    return *instance;
 }
 
-void update () {
-    std::promise<json> promise;
+void InformationPanel::feed (int type, json data) {
+    if (table != NULL)
+        delete table;
 
-    auto future = promise.get_future();
-    future.wait_for(std::chrono::seconds(5));
-}*/
+    if (type == 0) {
+        table = new ArrivalsTable(this);
+        table->feed(data);
+    }
+}

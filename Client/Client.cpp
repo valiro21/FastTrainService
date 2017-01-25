@@ -13,6 +13,7 @@
 #include "Client.hpp"
 #include "ActionSelector.hpp"
 #include "DateSelector.hpp"
+#include "InformationPanel.hpp"
 
 Client* Client::instance = nullptr;
 
@@ -92,22 +93,25 @@ void Client::search () {
     Calendar time = DateSelector::GetInstance ().getSelectedCalendar();
 
     searchPromise = std::promise<json> ();
-    auto producer = std::thread ([this]() {
-        json request;
-
+    json request;
+    int type = 0;
+    auto producer = std::thread ([&]() {
         std::string action;
         if (ActionSelector::GetInstance().getCurrentTab() == 0) {
             request["action"] = "departures";
             request["station"] = ActionSelector::GetInstance().getOriginCity();
+            type = 0;
         }
         else if (ActionSelector::GetInstance().getCurrentTab() == 1) {
             request["action"] = "arrivals";
             request["station"] = ActionSelector::GetInstance().getEndCity();
+            type = 1;
         }
         else {
             request["action"] = "path";
             request["station_start"] = ActionSelector::GetInstance().getOriginCity();
             request["station_destination"] = ActionSelector::GetInstance().getEndCity();
+            type = 2;
         }
         //get client selected date
         request["calendar"] = DateSelector::GetInstance().getSelectedCalendar().toJSON();
@@ -124,4 +128,10 @@ void Client::search () {
         }
     });
     producer.detach();
+
+    auto done = searchPromise.get_future();
+
+    auto response = done.get();
+
+    InformationPanel::GetInstance().feed(type, response);
 }

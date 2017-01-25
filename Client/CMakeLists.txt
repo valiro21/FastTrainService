@@ -23,7 +23,7 @@ set(SOURCE_FILES
         SearchWidget.cpp
         Client.cpp
         SearchButton.cpp
-        InformationPanel.cpp)
+        InformationPanel.cpp Tables/ArrivalsTable.cpp Tables/ArrivalsTable.hpp Tables/RoutesTable.hpp)
 
 set(EXECUTABLE_OUTPUT_PATH bin/${CMAKE_BUILD_TYPE})
 

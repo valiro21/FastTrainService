@@ -1,5 +1,5 @@
--I/home/vrosca/facultate/an2/seminarii/retele/teme_obligatorii/FastTrainService/Client/Client
+-I/home/vrosca/facultate/an2/seminarii/retele/teme_obligatorii/FastTrainService/Client/..
 -DDEBUG
 -o
-/home/vrosca/facultate/an2/seminarii/retele/teme_obligatorii/FastTrainService/Client/Client/moc_SearchButton.cpp
-/home/vrosca/facultate/an2/seminarii/retele/teme_obligatorii/FastTrainService/Client/Client/SearchButton.hpp
+/home/vrosca/facultate/an2/seminarii/retele/teme_obligatorii/FastTrainService/Client/moc_SearchButton.cpp
+/home/vrosca/facultate/an2/seminarii/retele/teme_obligatorii/FastTrainService/Client/SearchButton.hpp

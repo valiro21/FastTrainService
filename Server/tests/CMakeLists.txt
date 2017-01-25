@@ -3,6 +3,7 @@ project(FastTrainService)
 
 set(CMAKE_CXX_STANDARD 14)
 
+set(EXECUTABLE_OUTPUT_PATH bin/${CMAKE_BUILD_TYPE})
 add_executable(Server_tests ../src/Server.cpp ../src/ClientThread.cpp ServerTest.cpp)
 
 target_include_directories(Server_tests PUBLIC $<TARGET_PROPERTY:TrainProvider,INCLUDE_DIRECTORIES>)

@@ -2,6 +2,8 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QLayout>
 #include "SearchWidget.hpp"
+#include "InformationPanel.hpp"
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -10,6 +12,8 @@ int main(int argc, char *argv[])
     w.setFixedWidth(1000);
 
     SearchWidget s(&w);
+    InformationPanel::GetInstance(&w);
+
     w.show();
     return a.exec();
 }

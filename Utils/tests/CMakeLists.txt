@@ -3,6 +3,7 @@ project(FastTrainService)
 
 set(CMAKE_CXX_STANDARD 14)
 
+set(EXECUTABLE_OUTPUT_PATH bin/${CMAKE_BUILD_TYPE})
 add_executable(Utils_tests calendar_test.cpp)
 
 target_include_directories(Utils_tests PUBLIC $<TARGET_PROPERTY:gtest,INCLUDE_DIRECTORIES>)
