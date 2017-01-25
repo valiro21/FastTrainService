@@ -51,3 +51,4 @@ Client/__/
 /database-*
 bin/
 lib/googletest
+/Server/bin/
