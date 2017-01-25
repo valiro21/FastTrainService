@@ -21,7 +21,7 @@ json AutocompleteProvider::provide (neo4j_result_stream_t *stream) {
         json station = DatabaseUtils::GetInstance().neo4j_to_json(neo4j_result_field(result, 0))["properties"];
 
         json json_piece = json();
-        json_piece["station"] = station;
+        json_piece = station;
 
         word_result.push_back (json_piece);
         result = neo4j_fetch_next(stream);
