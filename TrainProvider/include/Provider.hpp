@@ -21,6 +21,7 @@ protected:
     }
     std::string query;
 public:
+    std::string type;
     json execute ();
 };
 

@@ -9,6 +9,7 @@ json Provider::execute () {
     try {
         DatabaseManager::GetInstance().query(query, [&](neo4j_result_stream_t *stream) {
             try {
+                Logger::GetInstance().logd(query);
                 json result = provide(stream);
                 if (result.find("ERROR") == result.end ()) {
                     json_result["RESULT"] = result;
@@ -41,6 +42,7 @@ json Provider::execute () {
                 json_result["ERROR"] = "Invalid database";
             }
         });
+        return json_result;
     }
     catch (std::ios_base::failure &e) {
         Logger::GetInstance().logd ("DB connection problem");

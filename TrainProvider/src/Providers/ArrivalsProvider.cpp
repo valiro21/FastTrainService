@@ -8,6 +8,7 @@ ArrivalsProvider::ArrivalsProvider (std::string station, std::string country, Ca
     std::string dayName = calendar.getDayName();
     query = "MATCH (tr:Trip)-[t:TO_STOP]->(a:Stop{name: '" + station + "'}), (tr:Trip)-[:FOR]->(r:Route)-[:STARTS_AT]->(b:Stop), (tr)-[:HAS]->(s:Service{"
             + dayName +": '1'}) RETURN r, b, t, tr;";
+    type = "ArrivalsProvider";
 }
 
 json ArrivalsProvider::provide (neo4j_result_stream_t * result_stream) {
