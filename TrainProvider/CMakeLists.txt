@@ -1,8 +1,6 @@
 project(FastTrainService)
 
-if ("${CMAKE_BUILD_TYPE}" EQUAL "Release")
-    add_definitions(-DRELEASE)
-endif()
+add_subdirectory(tests)
 
 include_directories("include")
 
