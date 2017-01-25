@@ -8,7 +8,7 @@ AutocompleteProvider::AutocompleteProvider (std::string prefix, float geo_lat, f
     std::string lat = std::to_string(geo_lat);
     std::string lng = std::to_string(geo_lng);
     query = "MATCH (a:Stop) WHERE a.name =~ '" + prefix + ".*' "
-                        + "RETURN a ORDER BY (toFloat(" + lng + ") - toFloat(a.lng))^2 + (toFloat(" + lat + ") - toFloat(a.lat))^2 asc LIMIT 5;";
+                        + "RETURN a ORDER BY (toFloat(" + lng + ") - toFloat(a.lng))^2 + (toFloat(" + lat + ") - toFloat(a.lat))^2 asc LIMIT 20;";
     type = "AutocompleteProvider";
 }
 

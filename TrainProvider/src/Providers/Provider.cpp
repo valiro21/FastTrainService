@@ -9,7 +9,6 @@ json Provider::execute () {
     try {
         DatabaseManager::GetInstance().query(query, [&](neo4j_result_stream_t *stream) {
             try {
-                Logger::GetInstance().logd(query);
                 json result = provide(stream);
                 if (result.find("ERROR") == result.end ()) {
                     json_result["RESULT"] = result;
