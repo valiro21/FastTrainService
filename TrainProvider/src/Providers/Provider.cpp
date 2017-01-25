@@ -9,8 +9,15 @@ json Provider::execute () {
     try {
         DatabaseManager::GetInstance().query(query, [&](neo4j_result_stream_t *stream) {
             try {
-                json_result["RESULT"] = provide(stream);
-                json_result["STATUS"] = "OK";
+                json result = provide(stream);
+                if (result.find("ERROR") == result.end ()) {
+                    json_result["RESULT"] = result;
+                    json_result["STATUS"] = "OK";
+                }
+                else {
+                    result["STATUS"] = "ERROR";
+                    json_result = result;
+                }
             }
             catch (std::domain_error &e) {
                 Logger::GetInstance().loge("Invalid request to database");
