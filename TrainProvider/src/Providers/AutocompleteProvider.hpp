@@ -1,5 +1,5 @@
 #include <neo4j-client.h>
-#include "Provider.hpp"
+#include "SingleQueryProvider.hpp"
 
 // Created by vrosca on 1/21/17.
 //
@@ -8,7 +8,7 @@
 #define FASTTRAINSERVICE_AUTOCOMPLETEPROVIDER_HPP
 
 
-class AutocompleteProvider : public Provider {
+class AutocompleteProvider : public SingleQueryProvider {
 public:
     json provide (neo4j_result_stream_t *stream);
     AutocompleteProvider (std::string prefix, float geo_lat, float geo_lng);

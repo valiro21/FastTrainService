@@ -5,9 +5,9 @@
 #ifndef FASTTRAINSERVICE_ERRORPROVIDER_HPP
 #define FASTTRAINSERVICE_ERRORPROVIDER_HPP
 
-#include "Provider.hpp"
+#include "SingleQueryProvider.hpp"
 
-class ErrorProvider : public Provider {
+class ErrorProvider : public SingleQueryProvider {
     json response;
 public:
     ErrorProvider (std::string message);

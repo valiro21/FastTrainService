@@ -5,10 +5,10 @@
 #ifndef FASTTRAINSERVICE_DEPARTURESPROVIDER_HPP
 #define FASTTRAINSERVICE_DEPARTURESPROVIDER_HPP
 
-#include "Provider.hpp"
+#include "SingleQueryProvider.hpp"
 #include <Calendar.hpp>
 
-class DeparturesProvider : public Provider {
+class DeparturesProvider : public SingleQueryProvider {
 public:
     json provide (neo4j_result_stream_t * result_stream);
     DeparturesProvider (std::string station, std::string country, Calendar calendar);

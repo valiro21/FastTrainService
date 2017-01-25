@@ -5,7 +5,6 @@
 #ifndef FASTTRAINSERVICE_PROVIDERFACTORY_HPP
 #define FASTTRAINSERVICE_PROVIDERFACTORY_HPP
 
-
 #include "Provider.hpp"
 #include <json/json.hpp>
 

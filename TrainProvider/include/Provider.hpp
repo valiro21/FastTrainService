@@ -1,5 +1,5 @@
 //
-// Created by vrosca on 1/21/17.
+// Created by vrosca on 1/26/17.
 //
 
 #ifndef FASTTRAINSERVICE_PROVIDER_HPP
@@ -11,6 +11,7 @@
 #include <vector>
 #include <DatabaseUtils.hpp>
 #include <Logger.hpp>
+#include <neo4j-client.h>
 
 using json = nlohmann::json;
 
@@ -19,10 +20,9 @@ protected:
     virtual json provide(neo4j_result_stream_t *result_stream) {
         return json ();
     }
-    std::string query;
 public:
     std::string type;
-    json execute ();
+    virtual json execute () = 0;
 };
 
 
