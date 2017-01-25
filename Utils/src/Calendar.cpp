@@ -222,3 +222,32 @@ long long Calendar::toUnixTime () {
     }
     return time * 1000;
 }
+
+void Calendar::setDayTimeUnix (unsinged long long time) {
+    int h = time / 3600; time -= hour * 3600;
+    int m = time / 60;
+    int s = time % 60;
+
+    set (s, Calendar::SECOND);
+    set (m, Calendar::MINUTE);
+    set (h, Calendar::HOUR);
+}
+
+unsigned long long Calendar::getDayTimeUnix () {
+    return get(Calendar::HOUR) * 60 * 60 + get(Calendar::MINUTE) * 60 + get(Calendar::SECOND);
+}
+
+std::string Calendar::getDayTimeStr () {
+    std::string h = Calendar::toZeroStr (get(Calendar::HOUR));
+    std::string m = Calendar::toZeroStr (get(Calendar::MINUTE));
+    std::string s = Calendar::toZeroStr (get(Calendar::SECOND));
+    return h + ':' + m + ':' + s;
+}
+
+std::string Calendar::toZeroStr (int val) {
+    std::string s;
+    if (val < 10) {
+        s = "0";
+    }
+    s += std::to_string(val);
+}

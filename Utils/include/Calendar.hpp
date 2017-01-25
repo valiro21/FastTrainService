@@ -53,6 +53,14 @@ public:
     long long toUnixTime ();
 
     static bool isLeapYear (int year);
+
+    void setDayTimeUnix (unsinged long long time);
+
+    unsigned long long getDayTimeUnix ();
+
+    std::string getDayTimeStr ();
+
+    static std::string toZeroStr (int val);
 };
 
 #endif //FASTTRAINSERVICE_CALENDAR_HPP
