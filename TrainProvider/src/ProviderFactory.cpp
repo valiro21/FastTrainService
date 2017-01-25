@@ -36,11 +36,11 @@ Provider* ProviderFactory::produce (json request) {
                     request["lat"],
                     request["lng"]);
         else
-            throw std::ios_base::failure("Field action missing from request");
+            return new ErrorProvider("Field action missing from request");
     }
     catch (std::domain_error &e) {
         Logger::GetInstance().loge("Invalid request to database");
         Logger::GetInstance().loge(e.what());
-        return new ErrorProvider ("Invalid request to database");
+        return new ErrorProvider ("The request is missing field");
     }
 }
