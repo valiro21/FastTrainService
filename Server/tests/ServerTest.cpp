@@ -45,7 +45,7 @@ TEST_F(ServerTest, SendDeparturesRequest) {
 TEST_F(ServerTest, RecieveDeparturesRequest) {
     try {
         auto future = std::async(std::launch::async, [&](){return ServerTest::client->receive();});
-        auto result = future.wait_for (std::chrono::seconds(10000));
+        auto result = future.wait_for (std::chrono::seconds(4));
         if (result == std::future_status::timeout) {
             FAIL() << "Request took too long";
         }

@@ -102,3 +102,25 @@ TEST_F (DatabaseTests, AutoCompleteMissingField) {
     ASSERT_STREQ(response["STATUS"].get<std::string>().c_str(), "ERROR");
 }
 
+TEST_F (DatabaseTests, ArrivalsMissingField) {
+    json j;
+    Calendar c;
+    j["action"] = "arrivals";
+
+    Provider *arrivals = ProviderFactory::GetInstance().produce(j);
+
+    json response = arrivals->execute();
+    ASSERT_STREQ(response["STATUS"].get<std::string>().c_str(), "ERROR");
+}
+
+TEST_F (DatabaseTests, DeparturesMissingField) {
+    json j;
+    Calendar c;
+    j["action"] = "departures";
+
+    Provider *arrivals = ProviderFactory::GetInstance().produce(j);
+
+    json response = arrivals->execute();
+    ASSERT_STREQ(response["STATUS"].get<std::string>().c_str(), "ERROR");
+}
+
