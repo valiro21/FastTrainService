@@ -135,6 +135,28 @@ TEST_F (DatabaseTests, ShortestPathLong) {
     Provider *path = ProviderFactory::GetInstance().produce(j);
 
     json response = path->execute();
+    Logger::GetInstance().logd(response.dump());
+    if (not_initialized) {
+        ASSERT_STREQ(response["STATUS"].get<std::string>().c_str(), "ERROR");
+    }
+    else {
+        ASSERT_STREQ(response["STATUS"].get<std::string>().c_str(), "OK");
+        std::vector<json> x = response["RESULT"].get<std::vector<json> > ();
+        Logger::GetInstance().logd(response.dump());
+        ASSERT_NE(x.size(), 0);
+    }
+}
+TEST_F (DatabaseTests, ShortestPathLongTimisoara) {
+    json j;
+    Calendar c(2017, 1, 26, 13, 30, 0);
+    j["action"] = "path";
+    j["origin"] = "Iaşi";
+    j["destination"] = "Timişoara C.E.T.";
+    j["time"] = c.toJSON();
+
+    Provider *path = ProviderFactory::GetInstance().produce(j);
+
+    json response = path->execute();
     if (not_initialized) {
         ASSERT_STREQ(response["STATUS"].get<std::string>().c_str(), "ERROR");
     }
@@ -167,6 +189,51 @@ TEST_F (DatabaseTests, ShortestPath) {
         ASSERT_NE(x.size(), 0);
     }
 }
+
+TEST_F (DatabaseTests, VeryLongShortestPath) {
+    json j;
+    Calendar c;
+    j["action"] = "path";
+    j["origin"] = "Afumaţi h.";
+    j["destination"] = "Golenţi Hm.";
+    j["time"] = c.toJSON();
+
+    Provider *path = ProviderFactory::GetInstance().produce(j);
+
+    json response = path->execute();
+    if (not_initialized) {
+        ASSERT_STREQ(response["STATUS"].get<std::string>().c_str(), "ERROR");
+    }
+    else {
+        ASSERT_STREQ(response["STATUS"].get<std::string>().c_str(), "OK");
+        std::vector<json> x = response["RESULT"].get<std::vector<json> > ();
+        Logger::GetInstance().logd(response.dump());
+        ASSERT_NE(x.size(), 0);
+    }
+}
+
+TEST_F (DatabaseTests, EvenLongerShortestPath) {
+    json j;
+    Calendar c;
+    j["action"] = "path";
+    j["origin"] = "Ianca hc.";
+    j["destination"] = "Almăj h.";
+    j["time"] = c.toJSON();
+
+    Provider *path = ProviderFactory::GetInstance().produce(j);
+
+    json response = path->execute();
+    if (not_initialized) {
+        ASSERT_STREQ(response["STATUS"].get<std::string>().c_str(), "ERROR");
+    }
+    else {
+        ASSERT_STREQ(response["STATUS"].get<std::string>().c_str(), "OK");
+        std::vector<json> x = response["RESULT"].get<std::vector<json> > ();
+        Logger::GetInstance().logd(response.dump());
+        ASSERT_NE(x.size(), 0);
+    }
+}
+
 
 TEST_F (DatabaseTests, ShortestPathVoid) {
     json j;
