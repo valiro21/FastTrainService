@@ -11,6 +11,7 @@
 class ShortestPathProvider : public MultiQueryProvider {
 protected:
     json provide(json request);
+    bool canceled;
 public:
     ShortestPathProvider(json request) : MultiQueryProvider(request) {};
 };

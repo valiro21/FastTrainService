@@ -6,6 +6,7 @@
 #include <queue>
 #include <unordered_map>
 #include <Calendar.hpp>
+#include <future>
 
 std::vector<std::pair<int, std::pair< std::pair<long long,  std::string>, float > > > getNeighbours (int id, Calendar c, float lat, float lng) {
     std::string str_lng = std::to_string(lng);
@@ -29,6 +30,8 @@ std::vector<std::pair<int, std::pair< std::pair<long long,  std::string>, float 
             std::string trip_id  = DatabaseUtils::GetInstance().neo4j_get_string(neo4j_result_field(result, 6));
 
             int idn = std::stoi(idn_str);
+            if (idn == 11906)
+                idn = 11906;
             float tlat = std::stof(lat_str);
             float tlng = std::stof(lng_str);
             float dist = (lat - tlat) * (lat - tlat) + (lng - tlng) * (lng - tlng);
@@ -49,9 +52,15 @@ std::vector<std::pair<int, std::pair< std::pair<long long,  std::string>, float 
                 time += c2.getDayTimeUnix() - c.getDayTimeUnix() + 1;
                 c2.add(1, Calendar::SECOND);
 
-                while (service[c2.getDayName()].get<std::string>() != "1") {
+                int day = 0;
+                while (day < 3 && service[c2.getDayName()].get<std::string>() != "1") {
                     time += 24 * 60 * 60;
                     c2.add(1, Calendar::DAY);
+                    day++;
+                }
+                if (day == 3) {
+                    result = neo4j_fetch_next(result_stream);
+                    continue;
                 }
             }
 
@@ -216,7 +225,7 @@ json ShortestPathProvider::provide(json request) {
         c.add((int) nod.first.second, Calendar::SECOND);
         auto ngh = getNeighbours(nod.second, c, lat, lng);
 
-        bool stop;
+        bool stop = false;
         for (auto it : ngh) {
             long long &n = road[it.first];
             if (nod.first.second + it.second.first.first < n || n == 0 && it.first != origin_id) {
