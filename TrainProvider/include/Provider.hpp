@@ -16,10 +16,6 @@
 using json = nlohmann::json;
 
 class Provider {
-protected:
-    virtual json provide(neo4j_result_stream_t *result_stream) {
-        return json ();
-    }
 public:
     std::string type;
     virtual json execute () = 0;

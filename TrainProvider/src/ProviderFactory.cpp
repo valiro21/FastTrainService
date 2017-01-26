@@ -7,6 +7,7 @@
 #include "Providers/DeparturesProvider.hpp"
 #include "Providers/AutocompleteProvider.hpp"
 #include "Providers/ErrorProvider.hpp"
+#include "Providers/ShortestPathProvider.hpp"
 
 ProviderFactory* ProviderFactory::instance = nullptr;
 
@@ -35,6 +36,8 @@ Provider* ProviderFactory::produce (json request) {
                     request["prefix"].get<std::string>(),
                     request["lat"],
                     request["lng"]);
+        else if (action == "path")
+            return new ShortestPathProvider (request);
         else
             return new ErrorProvider("Field action missing from request");
     }

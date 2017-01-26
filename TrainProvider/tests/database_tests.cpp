@@ -124,3 +124,51 @@ TEST_F (DatabaseTests, DeparturesMissingField) {
     ASSERT_STREQ(response["STATUS"].get<std::string>().c_str(), "ERROR");
 }
 
+TEST_F (DatabaseTests, ShortestPath) {
+    json j;
+    Calendar c;
+    j["action"] = "path";
+    j["origin"] = "Iaşi";
+    j["destination"] = "Galaţi";
+    j["time"] = c.toJSON();
+
+    Provider *path = ProviderFactory::GetInstance().produce(j);
+
+    json response = path->execute();
+    if (not_initialized) {
+        ASSERT_STREQ(response["STATUS"].get<std::string>().c_str(), "ERROR");
+    }
+    else {
+        ASSERT_STREQ(response["STATUS"].get<std::string>().c_str(), "OK");
+        std::vector<json> x = response["RESULT"].get<std::vector<json> > ();
+        Logger::GetInstance().logd(response.dump());
+        ASSERT_NE(x.size(), 0);
+    }
+}
+
+TEST_F (DatabaseTests, ShortestPathVoid) {
+    json j;
+    Calendar c;
+    j["action"] = "path";
+    j["origin"] = "Iai";
+    j["destination"] = "Galaţi";
+    j["time"] = c.toJSON();
+
+    Provider *path = ProviderFactory::GetInstance().produce(j);
+
+    json response = path->execute();
+    ASSERT_STREQ(response["STATUS"].get<std::string>().c_str(), "ERROR");
+}
+
+TEST_F (DatabaseTests, ShortestPathMissing) {
+    json j;
+    Calendar c;
+    j["action"] = "path";
+    j["destination"] = "Galaţi";
+    j["time"] = c.toJSON();
+
+    Provider *path = ProviderFactory::GetInstance().produce(j);
+
+    json response = path->execute();
+    ASSERT_STREQ(response["STATUS"].get<std::string>().c_str(), "ERROR");
+}
