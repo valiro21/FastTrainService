@@ -19,6 +19,7 @@ public:
 
 
     std::string neo4j_raw_string (neo4j_value_t value);
+    std::string neo4j_get_string (neo4j_value_t value);
     json neo4j_to_json (neo4j_value_t value);
 };
 

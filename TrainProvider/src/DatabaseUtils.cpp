@@ -22,8 +22,32 @@ std::string DatabaseUtils::neo4j_raw_string (neo4j_value_t value) {
         buf = new char[nr+2];
         neo4j_ntostring(value, buf, 2048);
     }
+
     std::string result = buf;
     delete[] buf;
+
+    return result;
+}
+
+std::string DatabaseUtils::neo4j_get_string (neo4j_value_t value) {
+    char *buf = new char[2048];
+    size_t nr;
+    if ((nr = neo4j_ntostring(value, buf, 2048)) > 2048) {
+        delete[] buf;
+        buf = new char[nr+2];
+        neo4j_ntostring(value, buf, 2048);
+    }
+
+    std::string result;
+    if (buf[0] == '"') {
+        result = std::string (buf + 1);
+    }
+    else {
+        result = buf;
+    }
+    delete[] buf;
+    if (result.back() == '"') result.pop_back();
+
     return result;
 }
 
