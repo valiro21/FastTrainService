@@ -14,7 +14,7 @@ protected:
 
 public:
     static WidgetFactory& GetInstance ();
-    QWidget* produce_panel (QWidget *date, QWidget *selector, QWidget* action_button);
+    QWidget* produce_panel (QWidget *date, QWidget *selector, QWidget* action_button, int height);
 };
 
 

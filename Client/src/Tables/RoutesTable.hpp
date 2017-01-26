@@ -33,6 +33,15 @@ public:
         setRowCount(0);
         setHorizontalHeaderLabels(header);
     }
+
+    void setWaitingHeader () {
+        setColumnCount(1);
+        setColumnWidth(0, this->width());
+        QStringList header;
+        header << "Searching ....";
+        setRowCount(0);
+        setHorizontalHeaderLabels(header);
+    }
 public slots:
    virtual void feed (json response) = 0;
 };

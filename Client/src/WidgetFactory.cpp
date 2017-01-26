@@ -15,7 +15,7 @@ WidgetFactory& WidgetFactory::GetInstance () {
     return *instance;
 }
 
-QWidget* WidgetFactory::produce_panel (QWidget *date, QWidget *selector, QWidget* action_button) {
+QWidget* WidgetFactory::produce_panel (QWidget *date, QWidget *selector, QWidget* action_button, int height) {
     QWidget *panel = new QWidget();
     QLayout *layout = new QVBoxLayout();
     layout->addWidget(date);
@@ -24,6 +24,6 @@ QWidget* WidgetFactory::produce_panel (QWidget *date, QWidget *selector, QWidget
     layout->addWidget(action_button);
     panel->setLayout(layout);
     panel->setFixedWidth(200);
-    panel->setFixedHeight(170);
+    panel->setFixedHeight(height);
     return panel;
 }
