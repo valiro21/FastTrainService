@@ -19,7 +19,7 @@ DeparturesTab::DeparturesTab (QWidget *parent) : QWidget(parent) {
 
     QObject::connect(searchButton, SIGNAL(clicked(bool)), this, SLOT(search(bool)));
 
-    QWidget *leftPanel = WidgetFactory::GetInstance ().produce_panel(dateSelector, citySelector, searchButton);
+    QWidget *leftPanel = WidgetFactory::GetInstance ().produce_panel(dateSelector, citySelector, searchButton, 170);
 
     routeInfo = new DeparturesTable();
 
@@ -41,7 +41,7 @@ void DeparturesTab::search(bool checked) {
         request["time"] = date.toJSON();
         auto future = std::async(std::launch::async, [request](){return Client::GetInstance().search(request);});
 
-        auto timeout = future.wait_for (std::chrono::seconds (4));
+        auto timeout = future.wait_for (std::chrono::seconds (6));
         if (timeout == std::future_status::timeout) {
             Logger::GetInstance() << "Timeout reached\n";
             return;
