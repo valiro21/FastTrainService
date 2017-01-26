@@ -21,6 +21,12 @@ void Logger::logd (std::string message) const {
 }
 
 void Logger::loge (std::string message) const {
+#ifndef RELEASE
+    std::cerr << "Error: " << message << '\n';
+#endif
+}
+
+void Logger::logE (std::string message) const {
     std::cerr << "Error: " << message << '\n';
 }
 

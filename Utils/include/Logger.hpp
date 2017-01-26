@@ -15,6 +15,7 @@ public:
     static Logger& GetInstance();
     void logd (std::string message) const;
     void loge(std::string message) const;
+    void logE(std::string message) const;
     Logger& operator << (std::string);
     Logger& operator << (int);
 };
