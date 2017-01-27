@@ -62,7 +62,7 @@ MATCH (trip:Trip{id: row.trip_id}), (stop:Stop{id:row.stop_id})
 WHERE row.arrival_time is not null
 MERGE (trip)-[:TO_STOP{
 nr: row.stop_sequence,
-arrival: (toInteger(substring(row.arrival_time,0,2)) % 24) * 60 * 60 + toInteger(substring(row.arrival_time, 3, 2)) * 60 + toInteger (substring(row.arrival_time, 6, 2))
+arrival: toInteger(substring(row.arrival_time,0,2)) * 60 * 60 + toInteger(substring(row.arrival_time, 3, 2)) * 60 + toInteger (substring(row.arrival_time, 6, 2))
 }]->(stop);
 
 USING PERIODIC COMMIT
@@ -71,7 +71,7 @@ MATCH (trip:Trip{id: row.trip_id}), (stop:Stop{id:row.stop_id})
 WHERE row.departure_time is not null
 MERGE (stop)-[:TO_TRIP{
 nr: row.stop_sequence,
-departure: (toInteger(substring(row.departure_time,0,2)) % 24) * 60 * 60 + toInteger(substring(row.departure_time, 3, 2)) * 60 + toInteger (substring(row.departure_time, 6, 2))
+departure: toInteger(substring(row.departure_time,0,2)) * 60 * 60 + toInteger(substring(row.departure_time, 3, 2)) * 60 + toInteger (substring(row.departure_time, 6, 2))
 }]->(trip);
 
 USING PERIODIC COMMIT
@@ -85,3 +85,10 @@ LOAD CSV WITH HEADERS FROM "file:/tmp/data/stop_times.txt" AS row
 MATCH (trip:Trip{id: row.trip_id})-[:FOR]->(route:Route), (stop:Stop{id:row.stop_id})
 WHERE row.departure_time is null
 MERGE (route)-[:ENDS_AT]->(stop);
+
+CREATE CONSTRAINT ON (a:Stop) ASSERT a.name IS UNIQUE;
+CREATE CONSTRAINT ON (r:Route) ASSERT r.name IS UNIQUE;
+CREATE CONSTRAINT ON (r:Route) ASSERT r.id IS UNIQUE;
+CREATE CONSTRAINT ON (a:Stop) ASSERT a.id IS UNIQUE;
+CREATE CONSTRAINT ON (t:Trip) ASSERT t.id IS UNIQUE;
+CREATE CONSTRAINT ON (s:Service) ASSERT s.id IS UNIQUE;
