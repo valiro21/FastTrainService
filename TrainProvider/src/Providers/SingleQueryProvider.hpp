@@ -14,7 +14,9 @@
 #include "Provider.hpp"
 
 using json = nlohmann::json;
-
+/** Interface for requests that need a single query to complete.
+ * Provides internal error handling
+ */
 class SingleQueryProvider : public Provider {
 protected:
     std::string query;

@@ -7,7 +7,9 @@
 
 
 #include "MultiQueryProvider.hpp"
-
+/**
+ * Returns routes between cities. Will try to find the fastest one while not changin trains too many times.
+ */
 class ShortestPathProvider : public MultiQueryProvider {
 protected:
     json provide(json request);

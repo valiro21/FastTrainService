@@ -7,7 +7,8 @@
 #ifndef FASTTRAINSERVICE_AUTOCOMPLETEPROVIDER_HPP
 #define FASTTRAINSERVICE_AUTOCOMPLETEPROVIDER_HPP
 
-
+/** Returns stations that match a given prefix.
+ */
 class AutocompleteProvider : public SingleQueryProvider {
 public:
     json provide (neo4j_result_stream_t *stream);

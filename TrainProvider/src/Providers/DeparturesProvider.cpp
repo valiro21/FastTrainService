@@ -7,7 +7,7 @@
 DeparturesProvider::DeparturesProvider (std::string station, std::string country, Calendar calendar) {
     std::string dayName = calendar.getDayName();
     query = "MATCH (a:Stop{name: '" + station+ "'})-[t:TO_TRIP]->(tr:Trip)-[:FOR]->(r:Route)-[:ENDS_AT]->(b:Stop), (tr)-[:HAS]->(s:Service{"
-        + dayName +": '1'}), (tr)-[end:TO_STOP]->(b) RETURN r, b, t, end;";
+        + dayName +": '1'}), (tr)-[end:TO_STOP]->(b) WHERE t.departure >= " + std::to_string(calendar.getDayTimeUnix()) + " RETURN r, b, t, end;";
     type = "DeparturesProvider";
 }
 

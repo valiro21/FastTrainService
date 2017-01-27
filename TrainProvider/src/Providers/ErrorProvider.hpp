@@ -6,7 +6,8 @@
 #define FASTTRAINSERVICE_ERRORPROVIDER_HPP
 
 #include "SingleQueryProvider.hpp"
-
+/** Returns an error message as a json
+ */
 class ErrorProvider : public SingleQueryProvider {
     json response;
 public:

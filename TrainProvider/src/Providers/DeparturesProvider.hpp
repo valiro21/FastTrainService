@@ -8,6 +8,8 @@
 #include "SingleQueryProvider.hpp"
 #include <Calendar.hpp>
 
+/** Returns trains that will depart after a given time at the given station
+ */
 class DeparturesProvider : public SingleQueryProvider {
 public:
     json provide (neo4j_result_stream_t * result_stream);

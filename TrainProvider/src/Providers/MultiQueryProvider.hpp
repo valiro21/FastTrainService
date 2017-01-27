@@ -15,6 +15,9 @@
 
 using json = nlohmann::json;
 
+/** Base class for providers that need multiple queries.
+ *  Provides error handling
+ */
 class MultiQueryProvider : public Provider {
 protected:
     virtual json provide(json request) {
