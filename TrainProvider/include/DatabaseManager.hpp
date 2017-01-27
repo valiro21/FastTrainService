@@ -10,6 +10,7 @@
 #include <errno.h>
 #include <functional>
 #include <ScheduleThread.hpp>
+#include <iostream>
 /** Main controller for the database.
  * Ensures safe query and initialisation.
  */
