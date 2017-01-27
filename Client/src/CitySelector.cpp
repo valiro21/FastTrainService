@@ -12,7 +12,7 @@ void CitySelector::textAChanged(const QString &text) {
     std::string str_text = text.toUtf8().constData();
     auto result = std::async (std::launch::async, [str_text]() {return Client::GetInstance ().autocompleteUpdate(str_text);});
     autocomplete.lock ();
-    auto status = result.wait_for (std::chrono::milliseconds (300));
+    auto status = result.wait_for (std::chrono::milliseconds (600));
     autocomplete.unlock ();
     //auto status = result.wait_for (std::chrono::seconds (3000));
 
