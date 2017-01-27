@@ -3,12 +3,6 @@ project(FastTrainService)
 
 set(CMAKE_CXX_STANDARD 14)
 
-if(CMAKE_BUILD_TYPE EQUAL "Release")
-    add_definitions(-DRELEASE)
-else()
-    add_definitions(-DDEBUG)
-endif()
-
 add_subdirectory("lib/googletest")
 add_subdirectory("Utils")
 add_subdirectory("TrainProvider")
