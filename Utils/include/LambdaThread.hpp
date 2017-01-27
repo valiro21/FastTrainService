@@ -9,6 +9,10 @@
 #include <functional>
 #include <JThread.hpp>
 
+/** Executes a lambda in a separate thread.
+ * Provides implementation of JThread. The run method is the lambda given
+ * to the constructor. This is usefull for passing threads between classes.
+ */
 class LambdaThread : public JThread{
 protected:
     std::function<void(void)> internal_lambda;

@@ -9,7 +9,11 @@
 #include <atomic>
 #include <thread>
 #include <vector>
-
+/** Thread class with the same procedures as Java thread
+ * This is an abstract class designed to be extended by other classes.
+ * Once the thread starts, the run method is executed, so this
+ * method should be implemented.
+ */
 class JThread {
     static std::atomic_int nr_threads;
     std::thread *proc;
@@ -17,7 +21,7 @@ class JThread {
     void notifyAll ();
 
 public:
-    void start ();
+    void start (); ///
     void join ();
     void attach_lambda(std::function<void()> lambda);
     void detach ();

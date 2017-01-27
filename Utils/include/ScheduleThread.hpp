@@ -8,7 +8,10 @@
 
 #include "LambdaThread.hpp"
 #include <functional>
-
+/** Executes a task at regular intervals.
+ *  After delay execute task until canceled. Waits for interval number of
+ *  milliseconds.
+ */
 class ScheduleThread : public LambdaThread {
     unsigned int delay, interval;
     bool canceled;

@@ -27,13 +27,17 @@ int Calendar::get_days_of_month (int month) {
 }
 
 void Calendar::add (int val, int type) {
-    int tmp_val, reminder;
+    int tmp_val, reminder = 0;
     switch (type) {
         case SECOND:
             tmp_val = second + val;
             if (tmp_val < 0) {
                 second = (unsigned int)  (60 + tmp_val % 60);
-                reminder = -1 + tmp_val / 60;
+                if (second == 60) {
+                    reminder = 1;
+                    second = 0;
+                }
+                reminder += -1 + tmp_val / 60;
             }
             else {
                 second = (unsigned int) (tmp_val % 60);
@@ -46,7 +50,11 @@ void Calendar::add (int val, int type) {
             tmp_val = minute + val;
             if (tmp_val < 0) {
                 minute = (unsigned int)  (60 + tmp_val % 60);
-                reminder = -1 + -tmp_val / 60;
+                if (minute == 60) {
+                    reminder = 1;
+                    minute = 0;
+                }
+                reminder = -1 + tmp_val / 60;
             }
             else {
                 minute = (unsigned int) (tmp_val % 60);
@@ -59,7 +67,11 @@ void Calendar::add (int val, int type) {
             tmp_val = hour + val;
             if (tmp_val < 0) {
                 hour = (unsigned int)  (24 + tmp_val % 24);
-                reminder = -1 + -tmp_val / 24;
+                if (hour == 24) {
+                    reminder = 1;
+                    hour = 0;
+                }
+                reminder = -1 + tmp_val / 24;
             }
             else {
                 hour = (unsigned int) (tmp_val % 24);
@@ -161,7 +173,7 @@ bool Calendar::isLeapYear (int year) {
 }
 
 std::string Calendar::to_string() {
-    return std::to_string(get(DAY)) + "-"+ std::to_string(get(MONTH)) + "-" + std::to_string(get(YEAR));
+    return std::to_string(get(DAY)) + "/"+ std::to_string(get(MONTH)) + "/" + std::to_string(get(YEAR));
 }
 
 json Calendar::toJSON () {
@@ -259,7 +271,7 @@ long long Calendar::toUnixTime () {
 }
 
 void Calendar::setDayTimeUnix (unsigned long long time) {
-    int h = time / 3600; time -= hour * 3600;
+    int h = time / 3600; time -= h * 3600;
     int m = time / 60;
     int s = time % 60;
 
@@ -285,5 +297,12 @@ std::string Calendar::toZeroStr (int val) {
         s = "0";
     }
     s += std::to_string(val);
+    return s;
+}
+
+std::string Calendar::to_complete_string () {
+    std::string s = to_string ();
+    s += " ";
+    s += getDayTimeStr();
     return s;
 }

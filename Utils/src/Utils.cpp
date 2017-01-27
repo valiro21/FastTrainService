@@ -27,6 +27,16 @@ Utils::Utils() {
     max_request_size = 400000;
     buffer_size = 2000;
     buffer = new char[2000];
+
+    // Romanian diacritics
+    ch['s'] = "ş";
+    ch['t'] = "ţ";
+    ch['a'] = "â|ă";
+    ch['i'] = "î";
+    ch['S'] = "Ş";
+    ch['T'] = "Ţ";
+    ch['A'] = "Â|Ă";
+    ch['I'] = "Î";
 }
 
 bool Utils::check_size(size_t size){
@@ -45,6 +55,9 @@ bool Utils::check_size(size_t size){
 }
 
 std::string Utils::Read (int fd) throw(std::ios_base::failure) {
+    std::mutex& mutex = read_m[fd];
+    mutex.lock();
+
     size_t nrc = (size_t)ReadInt (fd);
     int nr = 0;
 
@@ -60,6 +73,7 @@ std::string Utils::Read (int fd) throw(std::ios_base::failure) {
     }
 
     if (!check_size(nrc) || nr == -1 || result.size () != nrc) {
+        mutex.unlock();
         throw std::ios_base::failure(std::string("Failed to read string: ")
                                      + std::to_string(nrc) + " "
                                      + std::to_string(max_request_size) + " "
@@ -67,6 +81,7 @@ std::string Utils::Read (int fd) throw(std::ios_base::failure) {
                                      + strerror(errno) + " "
                                      + std::to_string(fd));
     }
+    mutex.unlock();
     return result;
 }
 
@@ -81,11 +96,18 @@ json Utils::ReadJSON (int fd) throw(std::ios_base::failure) {
 }
 
 void Utils::Write (int fd, std::string message) throw(std::ios_base::failure){
+    std::mutex& mutex = write_m[fd];
+    mutex.lock();
+
     unsigned long size = message.size ();
     Logger::GetInstance().logd("Wrote: " + std::to_string(size));
-    if ( write(fd, (char *)&size, 4) != 4 ||
-         dprintf(fd, "%s", message.c_str()) != size )
-        throw std::ios_base::failure(std::string ("Failed to write string: ") + strerror(errno) + " " + std::to_string(fd));
+    if (write(fd, (char *)&size, 4) != 4 ||
+         dprintf(fd, "%s", message.c_str()) != size ) {
+        mutex.unlock();
+        throw std::ios_base::failure(
+                std::string("Failed to write string: ") + strerror(errno) + " " + std::to_string(fd));
+    }
+    mutex.unlock();
 }
 
 void Utils::WriteJSON (int fd, json message) throw(std::ios_base::failure){
@@ -100,4 +122,21 @@ std::string Utils::repair_json_string (std::string str) {
 
 std::string Utils::getErrorJSONString(std::string error) {
     return "{\"error\": \"" + error + "\"}";
+}
+
+std::string Utils::diacritics_fix(std::string word) {
+    std::string fix;
+    for (unsigned int i = 0; i < word.size (); i++) {
+        if (ch.find (word[i]) != ch.end ()) {
+            fix += "(";
+            fix += word[i];
+            fix +="|";
+            fix += ch[word[i]];
+            fix += ")";
+        }
+        else {
+            fix += word[i];
+        }
+    }
+    return fix;
 }

@@ -13,7 +13,12 @@
 #include <future>
 #include "JThread.hpp"
 #include "LambdaThread.hpp"
-
+/** Command design pattern
+ *  Class the runs LambdaThreads, Only a small number can be run at
+ *  the same time, When a thread finishes, the next one in the order
+ *  of arrival will be executed.
+ *  Single instance of class.
+ */
 class RequestsPool {
     int limit;
     std::atomic_int active;
@@ -28,9 +33,9 @@ class RequestsPool {
 public:
     static RequestsPool& GetInstance ();
 
-    void setLimit (int number);
+    void setLimit (int number); // Set limit for number of simultaneous threads.
 
-    void execute (std::function<void(void)> task);
+    void execute (std::function<void(void)> task); // Create lambda thread and add to queue or execute if slot available.
 };
 
 
