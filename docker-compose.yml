@@ -1,14 +1,14 @@
 version: '2'
- services:
-  server:
-   image: quay.io/valiro21/fasttrainserver
-   command: bash -c "sleep 3 && /FastTrainServer"
-   ports:
-    - 8181:8181
-   links:
-    - db:db
-   db:
-     image: quay.io/valiro21/fasttraindatabase
-     volumes:
-      - ./database-data:/data
-      - ./database-logs:/logs
+services:
+ server:
+  image: quay.io/valiro21/fasttrainserver
+  command: bash -c "sleep 8 && /FastTrainServer"
+  ports:
+   - 8181:8181
+  links:
+   - db:db
+ db:
+  image: quay.io/valiro21/fasttraindatabase
+  volumes:
+   - ./database-data:/data
+   - ./database-logs:/logs
