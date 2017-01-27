@@ -39,9 +39,9 @@ void DeparturesTable::feed (json data) {
         c1.setDayTimeUnix (departure_time);
         c2.setDayTimeUnix (arrival_time);
 
-        std::string departure_time_str = c1.getDayTimeStr ();
+        std::string departure_time_str = c1.to_complete_string ();
 
-        std::string arrival_time_str = c2.getDayTimeStr ();
+        std::string arrival_time_str = c2.to_complete_string ();
 
         setItem(i, 0, new QTableWidgetItem(station.c_str()));
         setItem(i, 1, new QTableWidgetItem(departure_time_str.c_str()));
