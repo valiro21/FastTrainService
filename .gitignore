@@ -46,8 +46,11 @@ cmake-build-debug
 FastTrainService.cbp
 
 #qt
-Client/src/moc_*
+*moc_*
 Client/__/
+
+lib
+lib/*
 html
 latex
 /database-*

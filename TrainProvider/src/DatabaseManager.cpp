@@ -6,12 +6,11 @@
 #include <bits/ios_base.h>
 #include <Calendar.hpp>
 #include <Provider.hpp>
-#include "../include/DatabaseManager.hpp"
 #include "Providers/DelayResetProvider.hpp"
 
 std::string DatabaseManager::user = "neo4j";
 std::string DatabaseManager::pass = "train12345";
-#ifdef RELEASE
+#ifdef DOCKER_RELEASE
 std::string DatabaseManager::default_hostname = "db";
 #else
 std::string DatabaseManager::default_hostname = "localhost";

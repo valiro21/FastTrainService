@@ -143,8 +143,8 @@ json ShortestPathProvider::provide(json request) {
                     n = nod.first.second + it.second.first.first;
 
                     float score = it.second.second.first;
-                    score /= max_dist;
-                    score += (float) 100 / (float) it.second.second.second;
+                    score /= max_dist; // take the max distance
+                    score += (float) 100 / (float) it.second.second.second; // take out relationships and add to score
 
                     q.push(std::make_pair(std::make_pair(score, n), it.first));
                     prev[it.first] = std::make_pair(nod.second, it.second.first.second);

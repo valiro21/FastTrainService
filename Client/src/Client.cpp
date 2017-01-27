@@ -21,7 +21,11 @@ Client::Client(std::string host, int port) {
     if (port == 0)
         port = 8181;
     if (host == "") {
+#ifdef DOCKER_RELEASE
+        host = "server";
+#else
         host = "localhost";
+#endif
     }
 
     struct sockaddr_in svr_addr;
