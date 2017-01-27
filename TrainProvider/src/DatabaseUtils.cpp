@@ -3,6 +3,7 @@
 //
 
 #include <Logger.hpp>
+#include <DatabaseManager.hpp>
 #include "Utils.hpp"
 #include "DatabaseUtils.hpp"
 DatabaseUtils* DatabaseUtils::singleton = NULL;
