@@ -4,6 +4,7 @@
 
 #include <cstring>
 #include <Logger.hpp>
+#include <netinet/in.h>
 #include "Utils.hpp"
 
 Utils* Utils::singleton = NULL;
@@ -16,10 +17,11 @@ Utils& Utils::GetInstance () {
 }
 
 int Utils::ReadInt (int fd) throw(std::ios_base::failure) {
-    int x = 0; ssize_t nr;
+    unsigned int x = 0; ssize_t nr;
     if ((nr = read(fd, &x, 4)) == -1 || nr != 4) {
         throw std::ios_base::failure("Failed to read int!");
     }
+    x = ntohl(x);
     return x;
 }
 
@@ -102,9 +104,10 @@ void Utils::Write (int fd, std::string message) throw(std::ios_base::failure){
     std::mutex& mutex = write_m[fd];
     mutex.lock();
 
-    unsigned long size = message.size ();
+    unsigned int size = (unsigned int) message.size (), sizec;
     Logger::GetInstance().logd("Wrote: " + std::to_string(size));
-    if (write(fd, (char *)&size, 4) != 4 ||
+    sizec = ntohl(size);
+    if (write(fd, (char *)&sizec, 4) != 4 ||
          dprintf(fd, "%s", message.c_str()) != size ) {
         mutex.unlock();
         throw std::ios_base::failure(
