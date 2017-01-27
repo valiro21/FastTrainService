@@ -37,7 +37,7 @@ int DatabaseManager::init(std::string hostname, int port) {
                                             DatabaseManager::pass + "@" +
                                             db_hostname + ":" +
                                             std::to_string(db_port);
-    Logger::GetInstance().logd("Connecting to database on " + db_hostname + ":" + std::to_string(db_port));
+    Logger::GetInstance() << ("Connecting to database on " + db_hostname + ":" + std::to_string(db_port));
     neo4j_client_init();
 
     auto connection = neo4j_connect(DatabaseManager::connection_string.c_str(), NULL, NEO4J_INSECURE);
