@@ -1,12 +1,16 @@
 project(FastTrainService)
 
+if(DOCKER_RELEASE)
+    message(STATUS "TrainProvider lib detected Docker Release")
+    add_definitions(-DDOCKER_RELEASE)
+endif()
+
 message(STATUS "Server build type: ${CMAKE_BUILD_TYPE}")
 add_definitions("-D${CMAKE_BUILD_TYPE}")
 get_directory_property( DirDefs DIRECTORY "./" COMPILE_DEFINITIONS )
 foreach( d ${DirDefs} )
     message( STATUS "Found Define: " ${d} )
 endforeach()
-message( STATUS "DirDefs: " ${DirDefs} )
 
 include_directories(include)
 
