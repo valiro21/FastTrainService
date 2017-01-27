@@ -48,6 +48,8 @@ FastTrainService.cbp
 #qt
 Client/src/moc_*
 Client/__/
+html
+latex
 /database-*
 bin/
 lib/googletest
