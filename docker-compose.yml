@@ -1,16 +1,13 @@
 version: '2'
 services:
  server:
-  image: quay.io/valiro21/fasttrainservice
+  image: quay.io/valiro21/fasttrainserver
   ports:
    - 8181:8181
   links:
    - db:db
  db:
    image: quay.io/valiro21/fasttraindatabase
-   ports:
-    - 7474:7474
-    - 7687:7687
    volumes:
     - ./database-data:/data
     - ./database-logs:/logs
