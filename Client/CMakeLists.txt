@@ -1,5 +1,13 @@
 project(FastTrainService)
 
+message(STATUS "Client build type: ${CMAKE_BUILD_TYPE}")
+add_definitions("-D${CMAKE_BUILD_TYPE}")
+get_directory_property( DirDefs DIRECTORY "./" COMPILE_DEFINITIONS )
+foreach( d ${DirDefs} )
+    message( STATUS "Found Define: " ${d} )
+endforeach()
+message( STATUS "DirDefs: " ${DirDefs} )
+
 include_directories(..)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread -lneo4j-client -lssl -lcrypto")
