@@ -4,7 +4,10 @@
 
 #include <vector>
 #include <bits/ios_base.h>
+#include <Calendar.hpp>
+#include <Provider.hpp>
 #include "../include/DatabaseManager.hpp"
+#include "Providers/DelayResetProvider.hpp"
 
 std::string DatabaseManager::user = "neo4j";
 std::string DatabaseManager::pass = "train12345";
@@ -75,4 +78,12 @@ void DatabaseManager::query (std::string queryStr, std::function<void(neo4j_resu
     neo4j_reset_session(session);
     neo4j_end_session(session);
     neo4j_close(DatabaseManager::connection);
+}
+
+void DatabaseManager::startDelayManager () {
+    delay_manager_thread = new ScheduleThread([&](){
+        Provider *provider = new DelayResetProvider(Calendar());
+        provider->execute();
+    }, 10000, 600000);
+    delay_manager_thread->start();
 }

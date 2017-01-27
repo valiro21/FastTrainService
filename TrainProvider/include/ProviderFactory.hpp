@@ -7,7 +7,8 @@
 
 #include "Provider.hpp"
 #include <json/json.hpp>
-
+/** Given a request, it decides what request provider to use.
+ */
 class ProviderFactory {
 private:
     static ProviderFactory* instance;

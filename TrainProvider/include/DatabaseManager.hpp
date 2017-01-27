@@ -9,7 +9,10 @@
 #include <string>
 #include <errno.h>
 #include <functional>
-
+#include <ScheduleThread.hpp>
+/** Main controller for the database.
+ * Ensures safe query and initialisation.
+ */
 class DatabaseManager {
     static std::string user, pass;
     static std::string default_hostname;
@@ -21,6 +24,8 @@ public:
     static DatabaseManager& GetInstance ();
     int init (std::string host = "", int port = 0);
     void query (std::string queryStr, std::function<void(neo4j_result_stream_t*)> process_data) throw(std::ios_base::failure);
+    ScheduleThread *delay_manager_thread;
+    void startDelayManager ();
 };
 
 

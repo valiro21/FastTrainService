@@ -14,7 +14,8 @@
 #include <neo4j-client.h>
 
 using json = nlohmann::json;
-
+/** Base class for requests
+ */
 class Provider {
 public:
     std::string type;

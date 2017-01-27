@@ -8,6 +8,8 @@
 #include "Providers/AutocompleteProvider.hpp"
 #include "Providers/ErrorProvider.hpp"
 #include "Providers/ShortestPathProvider.hpp"
+#include "Providers/UpdateProvider.hpp"
+#include "Providers/UpdateDelay.hpp"
 
 ProviderFactory* ProviderFactory::instance = nullptr;
 
@@ -36,6 +38,13 @@ Provider* ProviderFactory::produce (json request) {
                     request["prefix"].get<std::string>(),
                     request["lat"],
                     request["lng"]);
+        else if (action == "update")
+            return new UpdateProvider (
+                    request["minute"].get<int>(),
+                    request["trip_id"].get<std::string>());
+        else if (action == "update_delay") {
+            return new UpdateDelay (request["trips"].get<std::vector<std::string> >());
+        }
         else if (action == "path")
             return new ShortestPathProvider (request);
         else
