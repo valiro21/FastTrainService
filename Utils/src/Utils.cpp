@@ -56,7 +56,9 @@ bool Utils::check_size(size_t size){
 
 std::string Utils::Read (int fd) throw(std::ios_base::failure) {
     std::mutex& mutex = read_m[fd];
+    Logger::GetInstance().logd("Reading!");
     mutex.lock();
+    Logger::GetInstance().logd("Got lock!");
 
     size_t nrc = (size_t)ReadInt (fd);
     int nr = 0;
@@ -82,6 +84,7 @@ std::string Utils::Read (int fd) throw(std::ios_base::failure) {
                                      + std::to_string(fd));
     }
     mutex.unlock();
+    Logger::GetInstance().logd("Readed!");
     return result;
 }
 
