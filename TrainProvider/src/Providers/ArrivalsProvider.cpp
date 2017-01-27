@@ -6,6 +6,7 @@
 
 ArrivalsProvider::ArrivalsProvider (std::string station, std::string country, Calendar calendar) {
     query = "MATCH (tr:Trip)-[t:TO_STOP]->(a:Stop{name: '" + station + "'}), (tr:Trip)-[:FOR]->(r:Route)-[:STARTS_AT]->(b:Stop), (b)-[t2:TO_TRIP]->(tr), (tr)-[:HAS]->(s:Service) WHERE ";
+    std::string case_when;
     int max_day = 3;
     for (int day = 0; day < max_day; day++) {
         std::string dayName = calendar.getDayName();
@@ -14,9 +15,11 @@ ArrivalsProvider::ArrivalsProvider (std::string station, std::string country, Ca
         query += "(t.arrival >= " + time + " AND s." + dayName + " = '1') ";
         if (day < max_day - 1) {
             query += "OR ";
+            case_when += "(t2.departure <= " + time + " AND s." + dayName + " = '1' AND t.arrival >= " + time + ") OR ";
         }
         else {
-            query += "RETURN r, b, t, tr;";
+            case_when += "(t.departure <= " + time + " AND s." + dayName + " = '1') then 1 else 0 end;";
+            query += "RETURN r, b, t, tr, case when " + case_when;
         }
         calendar.add(-1, Calendar::DAY);
     }
@@ -34,12 +37,14 @@ json ArrivalsProvider::provide (neo4j_result_stream_t * result_stream) {
         json origin = DatabaseUtils::GetInstance().neo4j_to_json(neo4j_result_field(result, 1))["properties"];
         json edge = DatabaseUtils::GetInstance().neo4j_to_json(neo4j_result_field(result, 2))["properties"];
         json trip = DatabaseUtils::GetInstance().neo4j_to_json(neo4j_result_field(result, 3))["properties"];
+        int is_running = (int) neo4j_int_value(neo4j_result_field(result, 4));
 
         json_response_piece["route"] = route;
         json_response_piece["origin"] = origin;
         json_response_piece["arrival"] = edge["arrival"];
         json_response_piece["delay"] = trip["delay"];
         json_response_piece["trip_id"] = trip["id"];
+        json_response_piece["running"] = is_running;
 
         pieces.push_back(json_response_piece);
         result = neo4j_fetch_next(result_stream);
