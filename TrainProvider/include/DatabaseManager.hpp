@@ -16,12 +16,12 @@
  */
 class DatabaseManager {
     static std::string user, pass;
-    static std::string default_hostname;
-    static int default_port;
     static std::string connection_string;
     static neo4j_connection_t *connection;
     static DatabaseManager* instance;
 public:
+    static std::string default_hostname;
+    static int default_port;
     static DatabaseManager& GetInstance ();
     int init (std::string host = "", int port = 0);
     void query (std::string queryStr, std::function<void(neo4j_result_stream_t*)> process_data) throw(std::ios_base::failure);

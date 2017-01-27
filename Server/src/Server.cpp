@@ -62,7 +62,7 @@ Server::Server (int port) throw(std::ios_base::failure) {
 
 void Server::run () throw(std::ios_base::failure) {
     if (DatabaseManager::GetInstance().init() == EXIT_FAILURE)
-        throw std::ios_base::failure("Cannot connect to database!");
+        throw std::ios_base::failure("Cannot connect to database on " + DatabaseManager::default_hostname + ":" + std::to_string(DatabaseManager::default_port) + "!");
 
     DatabaseManager::GetInstance().startDelayManager ();
 
