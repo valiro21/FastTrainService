@@ -46,7 +46,7 @@ cmake-build-debug
 FastTrainService.cbp
 
 #qt
-Client/moc_*
+Client/src/moc_*
 Client/__/
 /database-*
 bin/
