@@ -9,7 +9,7 @@
 
 TEST_F (DatabaseTests, Departures) {
     json j;
-    Calendar c;
+    Calendar c(2017,1,26,0,0,0);
     j["action"] = "departures";
     j["station"] = "Iaşi";
     j["country"] = "Romania";
@@ -30,7 +30,7 @@ TEST_F (DatabaseTests, Departures) {
 
 TEST_F (DatabaseTests, Arrivals) {
     json j;
-    Calendar c;
+    Calendar c(2017,1,26,0,0,0);
     j["action"] = "arrivals";
     j["station"] = "Iaşi";
     j["country"] = "Romania";
@@ -51,7 +51,6 @@ TEST_F (DatabaseTests, Arrivals) {
 
 TEST_F (DatabaseTests, AutoComplete) {
     json j;
-    Calendar c;
     j["action"] = "autocomplete";
     j["prefix"] = "Iaşi";
     j["lat"] = 43;
@@ -60,12 +59,36 @@ TEST_F (DatabaseTests, AutoComplete) {
     Provider *arrivals = ProviderFactory::GetInstance().produce(j);
 
     json response = arrivals->execute();
+    Logger::GetInstance().logd(response.dump());
     if (not_initialized) {
         ASSERT_STREQ(response["STATUS"].get<std::string>().c_str(), "ERROR");
     }
     else {
         ASSERT_STREQ(response["STATUS"].get<std::string>().c_str(), "OK");
         std::vector<json> x = response["RESULT"].get<std::vector<json> > ();
+        ASSERT_NE(x.size(), 0);
+    }
+}
+
+TEST_F (DatabaseTests, UpdateDelay) {
+    json j;
+    Calendar c(2017,1,26,0,0,0);
+    j["action"] = "update_delay";
+    std::vector<std::string> x;
+    x.push_back("15804");
+    x.push_back("15805");
+    j["trips"] = x;
+
+    Provider *path = ProviderFactory::GetInstance().produce(j);
+
+    json response = path->execute();
+    if (not_initialized) {
+        ASSERT_STREQ(response["STATUS"].get<std::string>().c_str(), "ERROR");
+    }
+    else {
+        ASSERT_STREQ(response["STATUS"].get<std::string>().c_str(), "OK");
+        std::vector<json> x = response["RESULT"].get<std::vector<json> > ();
+        Logger::GetInstance().logd(response.dump());
         ASSERT_NE(x.size(), 0);
     }
 }
@@ -218,6 +241,29 @@ TEST_F (DatabaseTests, EvenLongerShortestPath) {
     j["action"] = "path";
     j["origin"] = "Ianca hc.";
     j["destination"] = "Almăj h.";
+    j["time"] = c.toJSON();
+
+    Provider *path = ProviderFactory::GetInstance().produce(j);
+
+    json response = path->execute();
+    if (not_initialized) {
+        ASSERT_STREQ(response["STATUS"].get<std::string>().c_str(), "ERROR");
+    }
+    else {
+        ASSERT_STREQ(response["STATUS"].get<std::string>().c_str(), "OK");
+        std::vector<json> x = response["RESULT"].get<std::vector<json> > ();
+        Logger::GetInstance().logd(response.dump());
+        ASSERT_NE(x.size(), 0);
+    }
+}
+
+
+TEST_F (DatabaseTests, WhateverShortestPath) {
+    json j;
+    Calendar c;
+    j["action"] = "path";
+    j["origin"] = "Roşiori Nord";
+    j["destination"] = "Iaşi";
     j["time"] = c.toJSON();
 
     Provider *path = ProviderFactory::GetInstance().produce(j);
