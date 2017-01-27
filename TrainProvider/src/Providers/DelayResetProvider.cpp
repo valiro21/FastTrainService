@@ -10,8 +10,10 @@ DelayResetProvider::DelayResetProvider (Calendar calendar) {
     for (int day = 0; day < max_day; day++) {
         std::string dayName = calendar.getDayName();
         std::string time = std::to_string(calendar.getDayTimeUnix() + day * 60 * 60 * 24);
-
-        query += "(t2.arrival + tr.delay <= " + time + " AND s." + dayName + " = '1') ";
+        long long t2 = calendar.getDayTimeUnix() + day * 60 * 60 * 24 - 20 * 60;
+        if (t2 <= 0) t2 = 0;
+        std::string time2 = std::to_string(t2);
+        query += "(" + time2 + " <= t2.arrival + tr.delay AND t2.arrival + tr.delay <= " + time + " AND s." + dayName + " = '1') ";
         if (day < max_day - 1) {
             query += "OR ";
         }
@@ -20,11 +22,11 @@ DelayResetProvider::DelayResetProvider (Calendar calendar) {
         }
         calendar.add(-1, Calendar::DAY);
     }
+    Logger::GetInstance().logd(query);
     type = "DelayResetProvider";
 }
 
 json DelayResetProvider::provide (neo4j_result_stream_t * result_stream) {
-    neo4j_result_t *result = neo4j_fetch_next(result_stream);
     json json_response;
     json_response = json();
     json_response["RESULT"] = "OK";
