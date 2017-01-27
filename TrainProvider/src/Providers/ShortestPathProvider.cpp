@@ -94,79 +94,91 @@ void createResult (int node,
 }
 
 json ShortestPathProvider::provide(json request) {
-    std::string origin = request["origin"];
-    std::string destination = request["destination"];
-    Calendar time = Calendar::fromJSON(request["time"]);
+    canceled = false;
+    auto future = std::async(std::launch::async, [&]() {
+        std::string origin = request["origin"];
+        std::string destination = request["destination"];
+        Calendar time = Calendar::fromJSON(request["time"]);
 
-    std::priority_queue<std::pair<std::pair<float, long long>, int>, std::vector<std::pair<std::pair<float, long long>, int> >, std::greater<std::pair<std::pair<float, long long>, int> > > q;
-    std::unordered_map<int, long long> road;
-    std::unordered_map<int, std::pair<int,  std::string> > prev;
+        std::priority_queue<std::pair<std::pair<float, long long>, int>, std::vector<std::pair<std::pair<float, long long>, int> >, std::greater<std::pair<std::pair<float, long long>, int> > > q;
+        std::unordered_map<int, long long> road;
+        std::unordered_map<int, std::pair<int, std::string> > prev;
 
-    int origin_id = DatabaseUtils::GetInstance().getId (origin);
-    int final_id = DatabaseUtils::GetInstance().getId (destination);
+        int origin_id = DatabaseUtils::GetInstance().getId(origin);
+        int final_id = DatabaseUtils::GetInstance().getId(destination);
 
-    if (origin_id == -1 || final_id == -1) {
-        json result;
-        result["ERROR"] = "City not found";
-        return result;
-    }
+        if (origin_id == -1 || final_id == -1) {
+            json result;
+            result["ERROR"] = "City not found";
+            return result;
+        }
 
-    json origin_stop = DatabaseUtils::GetInstance().getStopById(origin_id);
-    json final_stop = DatabaseUtils::GetInstance().getStopById(final_id);
-    float olat = std::stof(origin_stop["lat"].get<std::string>());
-    float olng = std::stof(origin_stop["lng"].get<std::string>());
+        json origin_stop = DatabaseUtils::GetInstance().getStopById(origin_id);
+        json final_stop = DatabaseUtils::GetInstance().getStopById(final_id);
+        float olat = std::stof(origin_stop["lat"].get<std::string>());
+        float olng = std::stof(origin_stop["lng"].get<std::string>());
 
-    float lat = std::stof(final_stop["lat"].get<std::string>());
-    float lng = std::stof(final_stop["lng"].get<std::string>());
+        float lat = std::stof(final_stop["lat"].get<std::string>());
+        float lng = std::stof(final_stop["lng"].get<std::string>());
 
-    float max_dist = (lat - olat) * (lat - olat) + (lng - olng) * (lng - olng);
+        float max_dist = (lat - olat) * (lat - olat) + (lng - olng) * (lng - olng);
 
-    road[origin_id] = 0;
-    q.push (std::make_pair (std::make_pair (0, 0), origin_id));
-    while (!q.empty ()) {
-        auto nod = q.top ();
-        q.pop();
-        if (nod.second == final_id) break;
+        road[origin_id] = 0;
+        q.push(std::make_pair(std::make_pair(0, 0), origin_id));
+        while (!canceled && !q.empty()) {
+            auto nod = q.top();
+            q.pop();
+            if (nod.second == final_id) break;
 
-        if (road[nod.second] < nod.first.second) continue;
+            if (road[nod.second] < nod.first.second) continue;
 
-        Calendar c = time;
-        c.add((int) nod.first.second, Calendar::SECOND);
-        auto ngh = getNeighbours(nod.second, c, lat, lng);
+            Calendar c = time;
+            c.add((int) nod.first.second, Calendar::SECOND);
+            auto ngh = getNeighbours(nod.second, c, lat, lng);
 
-        bool stop = false;
-        for (auto it : ngh) {
-            long long &n = road[it.first];
-            if (nod.first.second + it.second.first.first < n || n == 0 && it.first != origin_id) {
-                n = nod.first.second + it.second.first.first;
+            bool stop = false;
+            for (auto it : ngh) {
+                long long &n = road[it.first];
+                if (nod.first.second + it.second.first.first < n || n == 0 && it.first != origin_id) {
+                    n = nod.first.second + it.second.first.first;
 
-                float score = it.second.second.first;
-                score /= max_dist;
-                score += (float) 100 / (float)it.second.second.second;
+                    float score = it.second.second.first;
+                    score /= max_dist;
+                    score += (float) 100 / (float) it.second.second.second;
 
-                q.push (std::make_pair(std::make_pair (score, n), it.first));
-                prev[it.first] = std::make_pair(nod.second, it.second.first.second);
-                if (it.first == final_id)
-                    stop = true;
-            }
+                    q.push(std::make_pair(std::make_pair(score, n), it.first));
+                    prev[it.first] = std::make_pair(nod.second, it.second.first.second);
+                    if (it.first == final_id)
+                        stop = true;
+                }
 
-            if (stop) {
-                std::vector<json> result;
-                createResult (final_id, result, prev, road);
-                json totals = json (result);
-                return totals;
+                if (stop) {
+                    std::vector<json> result;
+                    createResult(final_id, result, prev, road);
+                    json totals = json(result);
+                    return totals;
+                }
             }
         }
-    }
 
-    if (prev.find(final_id) == prev.end ()) {
+        if (prev.find(final_id) == prev.end()) {
+            json result;
+            result["ERROR"] = "No path between cities";
+            return result;
+        }
+
+        std::vector<json> result;
+        createResult(final_id, result, prev, road);
+        json totals = json(result);
+        return totals;
+    });
+
+    auto timeout = future.wait_for (std::chrono::seconds(15));
+    canceled = true;
+    if (timeout == std::future_status::timeout) {
         json result;
         result["ERROR"] = "No path between cities";
         return result;
     }
-
-    std::vector<json> result;
-    createResult (final_id, result, prev, road);
-    json totals = json (result);
-    return totals;
+    return future.get();
 }
