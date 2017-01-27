@@ -21,6 +21,7 @@ UpdateWidget::UpdateWidget(QWidget *parent) : QWidget(parent) {
     button->setFixedHeight(25);
     time->setFixedHeight(25);
 
+    layout->setMargin(0);
     layout->addWidget(button);
     layout->addWidget(time);
     time->setEnabled(false);
