@@ -37,7 +37,8 @@ void DeparturesTable::feed (json data) {
         unsigned int arrival_time = results[i]["arrival"];
         Calendar c1, c2;
         c1.setDayTimeUnix (departure_time);
-        c2.setDayTimeUnix (arrival_time);
+        c2 = c1;
+        c2.add (arrival_time-departure_time, Calendar::SECOND);
 
         std::string departure_time_str = c1.to_complete_string ();
 
