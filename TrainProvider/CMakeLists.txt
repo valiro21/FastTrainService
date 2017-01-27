@@ -2,6 +2,12 @@ project(FastTrainService)
 
 add_subdirectory(tests)
 
+if(CMAKE_BUILD_TYPE EQUAL "Release")
+    add_definitions(-DRELEASE)
+else()
+    add_definitions(-DDEBUG)
+endif()
+
 include_directories("include")
 
 file(GLOB_RECURSE SOURCE_FILES src/*.cpp)
