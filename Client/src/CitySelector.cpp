@@ -19,6 +19,7 @@ void CitySelector::textAChanged(const QString &text) {
     std::vector<std::string> results = result.get();
 
     QCompleter *completer = new QCompleter();
+    completer->setCompletionMode(QCompleter::UnfilteredPopupCompletion);
     QStringListModel *completerModel = new QStringListModel();
 
     completer->setModel(completerModel);

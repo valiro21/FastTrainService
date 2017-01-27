@@ -29,6 +29,8 @@ public:
     static Client& GetInstance ();
     std::vector<std::string> autocompleteUpdate (std::string text);
     json search (json request);
+    json update (std::string trip_id, int minute);
+    json updateDelay (json request);
 };
 
 

@@ -112,3 +112,36 @@ json Client::search (json request) {
         return response;
     }
 }
+
+json Client::update (std::string trip_id, int minute) {
+    try {
+        json updateRequest;
+        updateRequest["action"] = "update";
+        updateRequest["trip_id"] = trip_id;
+        updateRequest["minute"] = minute;
+        Utils::GetInstance().WriteJSON(this->sock_fd, updateRequest);
+        return Utils::GetInstance().ReadJSON(this->sock_fd);
+    }
+    catch (std::ios_base::failure &e) {
+        Logger::GetInstance().logd (e.what());
+        json response;
+        response["STATUS"] = "ERROR";
+        response["ERROR"] = "Failed to connect to server!";
+        return response;
+    }
+}
+
+json Client::updateDelay (json request) {
+    try {
+        request["action"] = "update_delay";
+        Utils::GetInstance().WriteJSON(this->sock_fd, request);
+        return Utils::GetInstance().ReadJSON(this->sock_fd);
+    }
+    catch (std::ios_base::failure &e) {
+        Logger::GetInstance().logd (e.what());
+        json response;
+        response["STATUS"] = "ERROR";
+        response["ERROR"] = "Failed to connect to server!";
+        return response;
+    }
+}

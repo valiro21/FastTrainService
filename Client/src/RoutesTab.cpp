@@ -53,7 +53,7 @@ void RoutesTab::search(bool checked) {
         request["time"] = date.toJSON();
         auto future = std::async(std::launch::async, [request](){return Client::GetInstance().search(request);});
 
-        auto timeout = future.wait_for (std::chrono::seconds (12));
+        auto timeout = future.wait_for (std::chrono::seconds (30));
         if (timeout == std::future_status::timeout) {
             Logger::GetInstance() << "Timeout reached\n";
             return;
