@@ -1,6 +1,8 @@
 project(FastTrainService)
 
-add_subdirectory(tests)
+if (DEFINED GTESTS)
+    add_subdirectory(tests)
+endif(DEFINED GTESTS)
 
 if(DOCKER_RELEASE)
     message(STATUS "TrainProvider lib detected Docker Release")

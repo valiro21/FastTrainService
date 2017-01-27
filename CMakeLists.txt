@@ -3,7 +3,10 @@ project(FastTrainService)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_subdirectory("lib/googletest")
+message(STATUS "${GTESTS}")
+if (DEFINED GTESTS)
+    add_subdirectory("lib/googletest")
+endif(DEFINED GTESTS)
 add_subdirectory("Utils")
 add_subdirectory("TrainProvider")
 add_subdirectory("Server")

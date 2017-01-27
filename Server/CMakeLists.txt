@@ -14,7 +14,9 @@ endforeach()
 
 include_directories(include)
 
+if (DEFINED GTESTS)
 add_subdirectory(tests)
+endif(DEFINED GTESTS)
 
 set(SOURCE_FILES
         ${SOURCE_FILES}

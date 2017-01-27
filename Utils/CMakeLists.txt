@@ -16,7 +16,9 @@ include_directories(include)
 
 add_definitions (-Wmultichar)
 
-add_subdirectory(tests)
+if (DEFINED GTESTS)
+    add_subdirectory(tests)
+endif(DEFINED GTESTS)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 
