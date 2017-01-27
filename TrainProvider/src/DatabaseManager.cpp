@@ -13,7 +13,7 @@ std::string DatabaseManager::pass = "train12345";
 #ifdef DOCKER_RELEASE
 std::string DatabaseManager::default_hostname = "db";
 #else
-std::string DatabaseManager::default_hostname = "localhost";
+std::string DatabaseManager::default_hostname = "127.0.0.1";
 #endif
 int DatabaseManager::default_port = 7687;
 std::string DatabaseManager::connection_string = "";
