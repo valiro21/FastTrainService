@@ -10,6 +10,12 @@
 #include "Logger.hpp"
 #include <DatabaseManager.hpp>
 
+#ifdef DOCKER_RELEASE
+const char* Server::default_hostname = "0.0.0.0";
+#else
+const char* Server::default_hostname = "localhost";
+#endif
+
 Server::Server (std::string host, int port) throw(std::ios_base::failure) {
     if (port == 0) {
         port = 8181;
@@ -52,7 +58,7 @@ Server::Server (int port) throw(std::ios_base::failure) {
 
     svr_addr.sin_family = AF_INET;
     svr_addr.sin_port = htons((uint16_t)port);
-    inet_pton (AF_INET, "127.0.0.1", &svr_addr.sin_addr.s_addr);
+    inet_pton (AF_INET, Server::default_hostname, &svr_addr.sin_addr.s_addr);
 
     //bind socket
     if (bind(listen_fd, (struct sockaddr *) &svr_addr, sizeof(svr_addr)) < 0) {

@@ -15,6 +15,7 @@ class Server : public JThread {
     int listen_fd;
     std::vector<ClientThread*> clients;
     std::mutex clients_lock;
+    static const char *default_hostname;
 public:
     Server (int port = 0) throw(std::ios_base::failure);
     Server (std::string host, int port) throw(std::ios_base::failure);
