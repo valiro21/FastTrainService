@@ -11,7 +11,7 @@ ArrivalsProvider::ArrivalsProvider (std::string station, std::string country, Ca
         std::string dayName = calendar.getDayName();
         std::string time = std::to_string(calendar.getDayTimeUnix() + day * 60 * 60 * 24);
 
-        query += "(t2.departure <= " + time + " AND t.arrival >= " + time + " AND s." + dayName + " = '1') ";
+        query += "(t.arrival >= " + time + " AND s." + dayName + " = '1') ";
         if (day < max_day - 1) {
             query += "OR ";
         }
