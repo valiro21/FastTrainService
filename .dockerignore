@@ -52,3 +52,7 @@ FastTrainService.cbp
 bin/
 database-data/
 database-logs/
+
+#doxy
+html
+latex
