@@ -17,6 +17,8 @@ qt5_wrap_cpp(FastTrainClientWrap src/Tables/PathsTable.hpp)
 qt5_wrap_cpp(FastTrainClientWrap src/ArrivalsTab.hpp)
 qt5_wrap_cpp(FastTrainClientWrap src/DeparturesTab.hpp)
 qt5_wrap_cpp(FastTrainClientWrap src/RoutesTab.hpp)
+qt5_wrap_cpp(FastTrainClientWrap src/UpdateWidget.hpp)
+
 
 set(SOURCE_FILES
         src/main.cpp
@@ -28,7 +30,9 @@ set(SOURCE_FILES
         src/ArrivalsTab.cpp
         src/DeparturesTab.cpp
         src/WidgetFactory.cpp
-        src/Tables/DeparturesTable.cpp src/RoutesTab.cpp src/RoutesTab.hpp src/Tables/PathsTable.cpp src/Tables/PathsTable.hpp)
+        src/Tables/DeparturesTable.cpp src/RoutesTab.cpp
+        src/Tables/PathsTable.cpp
+        src/UpdateWidget.cpp)
 
 set(EXECUTABLE_OUTPUT_PATH bin/${CMAKE_BUILD_TYPE})
 
