@@ -64,6 +64,8 @@ void Server::run () throw(std::ios_base::failure) {
     if (DatabaseManager::GetInstance().init() == EXIT_FAILURE)
         throw std::ios_base::failure("Cannot connect to database!");
 
+    DatabaseManager::GetInstance().startDelayManager ();
+
     listen(listen_fd, 5);
     while (true)
     {
